@@ -17,6 +17,8 @@ export interface Project {
   stack: string[];
   image: string;
   imageFit?: 'cover' | 'contain';
+  /** background behind a logo-style image (used with imageFit: 'contain') */
+  imageBg?: string;
   url?: string;
   urlLabel?: L;
   status?: L;
@@ -28,14 +30,16 @@ export const projects: Project[] = [
     kind: 'client',
     name: 'Iglesia Semilla de Vida',
     client: 'Iglesia Semilla de Vida · España',
-    tag: { pt: 'Sistema de gestão + site', es: 'Sistema de gestión + web', en: 'Management system + website' },
+    tag: { pt: 'Aplicativo + web', es: 'App + web', en: 'App + web' },
     summary: {
-      pt: 'O site da igreja e o SGE, o sistema que cuida de membros, tesouraria com relatórios em PDF e permissões por cargo. Tem app nativo para iPhone e roda em produção todos os dias.',
-      es: 'La web de la iglesia y el SGE, el sistema que gestiona miembros, tesorería con informes en PDF y permisos por cargo. Tiene app nativa para iPhone y funciona en producción a diario.',
-      en: "The church's website and SGE, the system that runs member records, treasury with PDF reports and role-based access. It ships with a native iPhone app and runs in production every day.",
+      pt: 'O site da igreja e o Sistema de Gestión Eclesiástica, que cuida de membros, tesouraria com relatórios em PDF e permissões por cargo. Tem app nativo para iPhone e roda em produção todos os dias.',
+      es: 'La web de la iglesia y el Sistema de Gestión Eclesiástica, que gestiona miembros, tesorería con informes en PDF y permisos por cargo. Tiene app nativa para iPhone y funciona en producción a diario.',
+      en: "The church's website and the Sistema de Gestión Eclesiástica, which runs member records, treasury with PDF reports and role-based access. It ships with a native iPhone app and runs in production every day.",
     },
     stack: ['React', 'Supabase', 'SwiftUI', 'Docker'],
-    image: '/projects/semilla-sge.svg',
+    image: '/projects/semilla-logo.svg',
+    imageFit: 'contain',
+    imageBg: '#3e4c59',
     url: 'https://semilladevida.org.es',
     urlLabel: { pt: 'Ver o site', es: 'Ver la web', en: 'Visit site' },
   },
@@ -46,9 +50,9 @@ export const projects: Project[] = [
     client: 'SaaS para igrejas',
     tag: { pt: 'SaaS multi-igreja', es: 'SaaS multi-iglesia', en: 'Multi-church SaaS' },
     summary: {
-      pt: 'Gestão de igrejas na web, iOS e Android: membros, tesouraria completa, notificações push, espanhol e português e modo escuro. Nasceu do SGE e hoje atende várias igrejas.',
-      es: 'Gestión de iglesias en web, iOS y Android: miembros, tesorería completa, notificaciones push, español y portugués y modo oscuro. Nació del SGE y hoy da servicio a varias iglesias.',
-      en: 'Church management on web, iOS and Android: members, full treasury, push notifications, Spanish and Portuguese, and dark mode. It grew out of SGE and now serves several churches.',
+      pt: 'Gestão de igrejas na web, iOS e Android: membros, tesouraria completa, notificações push, espanhol e português e modo escuro. Nasceu do Sistema de Gestión Eclesiástica da Semilla de Vida e hoje atende várias igrejas.',
+      es: 'Gestión de iglesias en web, iOS y Android: miembros, tesorería completa, notificaciones push, español y portugués y modo oscuro. Nació del Sistema de Gestión Eclesiástica de Semilla de Vida y hoy da servicio a varias iglesias.',
+      en: 'Church management on web, iOS and Android: members, full treasury, push notifications, Spanish and Portuguese, and dark mode. It grew out of the Semilla de Vida Sistema de Gestión Eclesiástica and now serves several churches.',
     },
     stack: ['React', 'TypeScript', 'Supabase', 'SwiftUI', 'PWA'],
     image: '/projects/reunio-1.webp',
