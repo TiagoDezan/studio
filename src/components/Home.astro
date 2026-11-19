@@ -1,0 +1,512 @@
+---
+import Base from '../layouts/Base.astro';
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { t, pick, projects, langPath, langLabel, LANGS, type Lang, type Project } from '../data/content';
+import { getSettings } from '../lib/store';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const s = getSettings();
+const p = (v: Record<Lang, string>) => pick(v, lang);
+
+const order = s.projectOrder.length ? s.projectOrder : projects.map((x) => x.id);
+const visible = projects
+  .filter((x) => !s.hiddenProjects.includes(x.id))
+  .sort((a, b) => (order.indexOf(a.id) + 1 || 99) - (order.indexOf(b.id) + 1 || 99));
+const clients = visible.filter((x) => x.kind === 'client');
+const own = visible.filter((x) => x.kind === 'own');
+const examples = t.hero.searchExamples[lang];
+const wa = s.whatsapp.replace(/[^\d]/g, '');
+const ig = s.instagram.replace(/^@/, '');
+---
+<Base title={p(t.meta.title)} description={p(t.meta.description)} lang={lang}>
+  {s.announcement.enabled && s.announcement.text && (
+    <div class="announce pixel" role="status"><span>{s.announcement.text}</span></div>
+  )}
+
+  <header class="top">
+    <div class="wrap top-in">
+      <a href={langPath[lang]} class="brand" aria-label="Noob Perdido Studio">
+        <Logo class="brand-logo" animated={false} />
+        <span class="pixel brand-tag">Studio</span>
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href="#servicos">{p(t.nav.services)}</a>
+        <a href="#projetos">{p(t.nav.work)}</a>
+        <a href="#processo">{p(t.nav.process)}</a>
+      </nav>
+      <div class="top-actions">
+        <div class="langs" role="group" aria-label="Language">
+          {LANGS.map((l) => (
+            <a href={langPath[l]} hreflang={l} aria-current={l === lang ? 'true' : undefined}>{langLabel[l]}</a>
+          ))}
+        </div>
+        <a class="btn small" href="#contato">{p(t.nav.contact)}</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="wrap hero-in">
+        <div class="hero-copy">
+          <p class="pixel eyebrow">{p(t.hero.eyebrow)}</p>
+          <h1>{p(t.hero.title)}</h1>
+          <p class="lead">{p(t.hero.lead)}</p>
+
+          <form class="search" id="hero-search" action="#contato" autocomplete="off">
+            <label for="q" class="sr-only">{p(t.hero.searchLabel)}</label>
+            <span class="search-caret" aria-hidden="true"></span>
+            <input id="q" name="q" type="text" maxlength="160" placeholder={examples[0]} data-examples={JSON.stringify(examples)} />
+            <button type="submit" aria-label={p(t.hero.searchLabel)}>
+              <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M15 15l6 6" stroke="currentColor" stroke-width="2.6" stroke-linecap="square"/></svg>
+            </button>
+          </form>
+          <p class="hint">{p(t.hero.searchHint)}</p>
+
+          <div class="hero-meta">
+            <span class={`status ${s.available ? 'open' : 'busy'}`}><i></i>{s.available ? p(t.status.open) : p(t.status.busy)}</span>
+            <a href="#projetos" class="link-arrow">{p(t.hero.cta)} <span aria-hidden="true">↓</span></a>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="hero-card">
+            <span class="pixel hud hud-tl">1UP · {lang === 'en' ? 'YOU' : lang === 'es' ? 'TÚ' : 'VOCÊ'}</span>
+            <span class="pixel hud hud-tr">HI 99999</span>
+            <Logo class="hero-logo" />
+            <span class="pixel hud hud-b">Press start</span>
+          </div>
+        </div>
+      </div>
+      <div class="wrap stats">
+        {t.stats.map((st) => (
+          <div class="stat reveal"><b>{st.value}</b><span>{p(st.label)}</span></div>
+        ))}
+      </div>
+    </section>
+
+    <section class="section services" id="servicos">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="pixel eyebrow">{p(t.services.eyebrow)}</p>
+          <h2>{p(t.services.title)}</h2>
+        </div>
+        <ul class="svc-grid">
+          {t.services.items.map((it, i) => (
+            <li class="svc reveal" style={`--d:${i * 70}ms`}>
+              <Icon name={it.icon} />
+              <h3>{p(it.title)}</h3>
+              <p>{p(it.body)}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section class="section work" id="projetos">
+      <div class="wrap">
+        {clients.length > 0 && (
+          <>
+            <div class="section-head reveal">
+              <p class="pixel eyebrow">{p(t.work.clientsEyebrow)}</p>
+              <h2>{p(t.work.clientsTitle)}</h2>
+            </div>
+            <div class="clients">
+              {clients.map((c: Project, i: number) => (
+                <article class={`client reveal ${i % 2 ? 'flip' : ''}`}>
+                  <div class="client-img"><img src={c.image} alt="" loading="lazy" decoding="async" width="1200" height="630" /></div>
+                  <div class="client-body">
+                    <p class="pixel tag">{p(c.tag)}</p>
+                    <h3>{c.name}</h3>
+                    <p>{p(c.summary)}</p>
+                    <ul class="chips">{c.stack.map((x) => <li>{x}</li>)}</ul>
+                    {c.url && <a class="btn ghost" href={c.url} target="_blank" rel="noopener">{c.urlLabel ? p(c.urlLabel) : c.url} <span aria-hidden="true">↗</span></a>}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </>
+        )}
+
+        {own.length > 0 && (
+          <>
+            <div class="section-head reveal own-head">
+              <p class="pixel eyebrow">{p(t.work.ownEyebrow)}</p>
+              <h2>{p(t.work.ownTitle)}</h2>
+            </div>
+            <div class="games">
+              {own.map((g: Project, i: number) => (
+                <article class="game reveal" style={`--d:${i * 80}ms`}>
+                  <div class="game-img">
+                    <img src={g.image} alt="" loading="lazy" decoding="async" />
+                    {g.status && <span class="pixel badge">{p(g.status)}</span>}
+                  </div>
+                  <div class="game-body">
+                    <p class="pixel tag">{p(g.tag)}</p>
+                    <h3>{g.name}</h3>
+                    <p>{p(g.summary)}</p>
+                    <div class="game-foot">
+                      <ul class="chips">{g.stack.map((x) => <li>{x}</li>)}</ul>
+                      {g.url && <a class="link-arrow" href={g.url} target="_blank" rel="noopener">{g.urlLabel ? p(g.urlLabel) : 'Info'} <span aria-hidden="true">↗</span></a>}
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    </section>
+
+    <section class="section process" id="processo">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="pixel eyebrow">{p(t.process.eyebrow)}</p>
+          <h2>{p(t.process.title)}</h2>
+        </div>
+        <ol class="steps">
+          {t.process.steps.map((st, i) => (
+            <li class="step reveal" style={`--d:${i * 90}ms`}>
+              <span class="pixel lvl">LVL {i + 1}</span>
+              <h3>{p(st.title)}</h3>
+              <p>{p(st.body)}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="section contact" id="contato">
+      <div class="wrap contact-in">
+        <div class="contact-copy reveal">
+          <p class="pixel eyebrow">{p(t.contact.eyebrow)}</p>
+          <h2>{p(t.contact.title)}</h2>
+          <p class="lead">{p(t.contact.lead)}</p>
+          <div class="direct">
+            <p>{p(t.contact.or)}</p>
+            <ul>
+              {s.email && <li><a href={`mailto:${s.email}`}>{s.email}</a></li>}
+              {wa && <li><a href={`https://wa.me/${wa}`} target="_blank" rel="noopener">WhatsApp</a></li>}
+              {ig && <li><a href={`https://instagram.com/${ig}`} target="_blank" rel="noopener">@{ig}</a></li>}
+            </ul>
+          </div>
+        </div>
+        <form class="form reveal" id="contact-form" method="post" action="/api/contact" data-ok={p(t.contact.ok)} data-fail={p(t.contact.fail)} data-sending={p(t.contact.sending)}>
+          <input type="hidden" name="lang" value={lang} />
+          <div class="hp" aria-hidden="true"><label>Website <input name="website" tabindex="-1" autocomplete="off" /></label></div>
+          <div class="row">
+            <label>
+              <span>{p(t.contact.name)}</span>
+              <input name="name" required maxlength="120" autocomplete="name" />
+            </label>
+            <label>
+              <span>{p(t.contact.email)}</span>
+              <input name="email" type="email" required maxlength="160" autocomplete="email" />
+            </label>
+          </div>
+          <fieldset>
+            <legend>{p(t.contact.type)}</legend>
+            <div class="pills">
+              {t.contact.types[lang].map((ty, i) => (
+                <label class="pill"><input type="radio" name="type" value={ty} checked={i === 0} /><span>{ty}</span></label>
+              ))}
+            </div>
+          </fieldset>
+          <label>
+            <span>{p(t.contact.message)}</span>
+            <textarea name="message" id="message" rows="5" required maxlength="4000" placeholder={p(t.contact.messagePh)}></textarea>
+          </label>
+          <div class="form-foot">
+            <button class="btn" type="submit">{p(t.contact.send)}</button>
+            <p class="form-status" role="status" aria-live="polite"></p>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="foot-pattern" aria-hidden="true"></div>
+    <div class="wrap foot-in">
+      <Logo class="foot-logo" />
+      <div class="foot-row">
+        <p class="pixel">© {new Date().getFullYear()} Noob Perdido Studio</p>
+        <p class="muted">{p(t.footer.rights)}</p>
+        <div class="langs">
+          {LANGS.map((l) => <a href={langPath[l]} hreflang={l} aria-current={l === lang ? 'true' : undefined}>{langLabel[l]}</a>)}
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // reveal on scroll
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    }, { rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+    // header shadow
+    const top = document.querySelector('.top');
+    const onScroll = () => top?.classList.toggle('scrolled', window.scrollY > 8);
+    addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+    // hero search: cycle placeholders, send the idea into the contact form
+    const q = document.getElementById('q') as HTMLInputElement | null;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (q) {
+      const ex: string[] = JSON.parse(q.dataset.examples || '[]');
+      let i = 0;
+      if (!reduce && ex.length > 1) setInterval(() => { if (document.activeElement !== q && !q.value) q.placeholder = ex[(i = (i + 1) % ex.length)]; }, 2600);
+      document.getElementById('hero-search')?.addEventListener('submit', (ev) => {
+        ev.preventDefault();
+        const v = q.value.trim() || q.placeholder;
+        if (v.trim().toLowerCase() === '/painel') { location.href = '/painel'; return; }
+        const m = document.getElementById('message') as HTMLTextAreaElement | null;
+        if (m && !m.value) m.value = v.charAt(0).toUpperCase() + v.slice(1) + '. ';
+        document.getElementById('contato')?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+        setTimeout(() => (document.querySelector('#contact-form input[name=name]') as HTMLInputElement | null)?.focus({ preventScroll: true }), reduce ? 0 : 700);
+      });
+    }
+
+    // konami code → hidden panel
+    const seq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+    let k = 0;
+    addEventListener('keydown', (e) => { k = e.key === seq[k] ? k + 1 : (e.key === seq[0] ? 1 : 0); if (k === seq.length) location.href = '/painel'; });
+
+    // contact form
+    const form = document.getElementById('contact-form') as HTMLFormElement | null;
+    form?.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const status = form.querySelector('.form-status') as HTMLElement;
+      const btn = form.querySelector('button[type=submit]') as HTMLButtonElement;
+      const label = btn.textContent;
+      btn.disabled = true; btn.textContent = form.dataset.sending || '…';
+      status.className = 'form-status'; status.textContent = '';
+      try {
+        const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+        if (!res.ok) throw new Error(String(res.status));
+        form.reset();
+        status.textContent = form.dataset.ok || 'OK';
+        status.classList.add('ok');
+      } catch {
+        status.textContent = form.dataset.fail || 'Error';
+        status.classList.add('err');
+      } finally {
+        btn.disabled = false; btn.textContent = label;
+      }
+    });
+  </script>
+</Base>
+
+<style>
+  .announce { background: var(--blue); color: var(--blue-ink); text-align: center; padding: 10px var(--gutter); font-size: 10px; }
+
+  /* header */
+  .top { position: sticky; top: 0; z-index: 50; background: rgb(0 0 0 / 0.72); backdrop-filter: blur(14px) saturate(140%); -webkit-backdrop-filter: blur(14px) saturate(140%); border-bottom: 1px solid transparent; transition: border-color .3s; }
+  .top.scrolled { border-bottom-color: var(--line); }
+  .top-in { display: flex; align-items: center; gap: 24px; height: 72px; }
+  .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; margin-right: auto; }
+  .brand :global(.brand-logo) { width: 132px; }
+  .brand-tag { font-size: 8px; color: var(--blue); border: 1px solid var(--line-2); padding: 5px 7px 4px; border-radius: 6px; }
+  .nav { display: flex; gap: 28px; }
+  .nav a { text-decoration: none; color: var(--muted); font-weight: 600; font-size: 15px; transition: color .2s; }
+  .nav a:hover { color: var(--text); }
+  .top-actions { display: flex; align-items: center; gap: 16px; }
+  .langs { display: flex; gap: 2px; padding: 3px; border: 1px solid var(--line); border-radius: 10px; }
+  .langs a { font: 600 12px/1 var(--font-display); letter-spacing: .06em; color: var(--faint); text-decoration: none; padding: 7px 8px; border-radius: 7px; }
+  .langs a:hover { color: var(--text); }
+  .langs a[aria-current] { background: var(--bg-2); color: var(--blue); }
+  .btn.small { min-height: 40px; padding: 0 16px; font-size: 14px; box-shadow: 0 3px 0 0 var(--blue-deep); }
+  @media (max-width: 920px) { .nav { display: none; } }
+  @media (max-width: 560px) {
+    .top-in { gap: 12px; height: 64px; }
+    .brand :global(.brand-logo) { width: 108px; }
+    .brand-tag { display: none; }
+    .top-actions .btn { display: none; }
+  }
+
+  /* hero */
+  .hero { position: relative; padding-top: clamp(48px, 9vw, 112px); overflow: hidden; }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: -1;
+    mask-image: linear-gradient(to bottom, #000 60%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent);
+    background:
+      radial-gradient(60% 50% at 78% 30%, rgb(50 204 254 / 0.16), transparent 70%),
+      radial-gradient(40% 40% at 10% 90%, rgb(50 204 254 / 0.06), transparent 70%);
+  }
+  .hero-bg::after {
+    content: ''; position: absolute; inset: 0;
+    background-image: url('/brand/pattern.svg');
+    background-size: 270px auto;
+    opacity: 0.07;
+    mask-image: radial-gradient(70% 60% at 70% 30%, #000, transparent 75%);
+    -webkit-mask-image: radial-gradient(70% 60% at 70% 30%, #000, transparent 75%);
+  }
+  .hero-in { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: clamp(32px, 5vw, 72px); align-items: center; }
+  .hero-copy { display: grid; gap: 22px; }
+  .hero h1 { font-size: clamp(42px, 6.6vw, 84px); line-height: 0.98; letter-spacing: -0.035em; }
+  .lead { color: var(--muted); font-size: clamp(17px, 1.6vw, 20px); max-width: 560px; }
+
+  .search {
+    display: flex; align-items: center; gap: 10px; max-width: 560px; margin-top: 10px;
+    border: 3px solid var(--blue); border-radius: 16px; padding: 6px 6px 6px 20px;
+    background: rgb(50 204 254 / 0.04);
+    transition: box-shadow .25s, background .25s;
+  }
+  .search:focus-within { box-shadow: 0 0 0 6px rgb(50 204 254 / 0.16); background: rgb(50 204 254 / 0.07); }
+  .search-caret { width: 2px; height: 24px; background: var(--text); animation: blink 1.1s steps(1) infinite; }
+  .search:focus-within .search-caret { display: none; }
+  .search input { flex: 1; min-width: 0; background: transparent; border: 0; outline: 0; color: var(--text); font: 500 18px/1.2 var(--font-body); padding: 12px 0; }
+  .search input::placeholder { color: var(--faint); }
+  .search button { flex: none; width: 48px; height: 48px; border-radius: 11px; border: 0; background: var(--blue); color: var(--blue-ink); display: grid; place-items: center; cursor: pointer; transition: transform .2s var(--ease); }
+  .search button:hover { transform: scale(1.06); }
+  .hint { color: var(--faint); font-size: 14px; margin-top: -10px; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .hero-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 14px 28px; margin-top: 6px; }
+  .status { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: var(--muted); }
+  .status i { width: 10px; height: 10px; background: #3ee07f; box-shadow: 0 0 0 4px rgb(62 224 127 / .16); }
+  .status.busy i { background: #ffb02e; box-shadow: 0 0 0 4px rgb(255 176 46 / .16); }
+  .link-arrow { font-weight: 700; color: var(--blue); text-decoration: none; font-size: 15px; white-space: nowrap; }
+  .link-arrow:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+  .hero-art { position: relative; }
+  .hero-card {
+    aspect-ratio: 1; border-radius: 28px; display: grid; place-items: center; padding: 14%;
+    background: linear-gradient(160deg, #0b1013, #030405);
+    border: 1px solid var(--line);
+    box-shadow: 0 40px 80px -30px rgb(50 204 254 / 0.25), inset 0 1px 0 rgb(255 255 255 / .04);
+    position: relative; overflow: hidden;
+  }
+  .hero-card::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgb(255 255 255 / .018) 0 2px, transparent 2px 4px); pointer-events: none; }
+  .hero-card :global(.hero-logo) { width: 100%; position: relative; }
+  .hud { position: absolute; font-size: 9px; color: var(--faint); }
+  .hud-tl { top: 22px; left: 24px; }
+  .hud-tr { top: 22px; right: 24px; }
+  .hud-b { bottom: 26px; left: 0; right: 0; text-align: center; color: var(--blue); animation: blink 1.4s steps(1) infinite; }
+  @media (prefers-reduced-motion: reduce) { .hud-b { animation: none; } }
+  @media (max-width: 860px) {
+    .hero-in { grid-template-columns: 1fr; }
+    .hero-art { order: -1; max-width: 420px; width: 100%; }
+    .hero-card { aspect-ratio: 16 / 9; padding: 10% 12%; }
+  }
+
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: clamp(56px, 8vw, 104px); border-top: 1px solid var(--line); }
+  .stat { display: flex; align-items: baseline; gap: 16px; padding: 28px 24px 0 0; transition-delay: var(--d, 0ms); }
+  .stat + .stat { padding-left: 24px; border-left: 1px solid var(--line); }
+  .stat b { font: 600 clamp(40px, 5vw, 56px)/1 var(--font-display); color: var(--blue); letter-spacing: -.04em; }
+  .stat span { color: var(--muted); font-size: 15px; line-height: 1.35; max-width: 18ch; }
+  @media (max-width: 720px) {
+    .stats { grid-template-columns: 1fr; }
+    .stat, .stat + .stat { padding: 20px 0; border-left: 0; border-bottom: 1px solid var(--line); }
+  }
+
+  /* services */
+  .svc-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; }
+  .svc { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .svc:nth-child(2n) { border-right: 0; }
+  .svc:nth-last-child(-n + 2) { border-bottom: 0; }
+  .svc { padding: clamp(28px, 4vw, 48px); display: grid; gap: 14px; align-content: start; transition: background .3s, opacity .8s var(--ease), transform .8s var(--ease); transition-delay: var(--d, 0ms); }
+  .svc:hover { background: var(--bg-1); }
+  .svc p { color: var(--muted); max-width: 46ch; }
+  .svc :global(.icon) { color: var(--blue); margin-bottom: 8px; }
+  @media (max-width: 720px) { .svc-grid { grid-template-columns: 1fr; } .svc { border-right: 0; } .svc:nth-last-child(2) { border-bottom: 1px solid var(--line); } }
+
+  /* work */
+  .work { background: linear-gradient(to bottom, var(--bg), var(--bg-1) 20%, var(--bg-1) 80%, var(--bg)); }
+  .clients { display: grid; gap: clamp(28px, 4vw, 40px); }
+  .client { display: grid; grid-template-columns: 1.1fr 1fr; gap: 0; border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; background: var(--bg); }
+  .client.flip .client-img { order: 2; }
+  .client-img { background: var(--bg-2); min-height: 280px; }
+  .client-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 1.2s var(--ease); }
+  .client:hover .client-img img { transform: scale(1.03); }
+  .client-body { padding: clamp(28px, 4vw, 52px); display: grid; gap: 16px; align-content: center; justify-items: start; }
+  .client-body h3 { font-size: clamp(28px, 3.2vw, 40px); }
+  .client-body > p:not(.tag) { color: var(--muted); }
+  .tag { color: var(--blue); font-size: 9px; }
+  .chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .chips li { font-size: 12px; font-weight: 600; color: var(--muted); border: 1px solid var(--line-2); border-radius: 999px; padding: 3px 10px; }
+  @media (max-width: 860px) {
+    .client { grid-template-columns: 1fr; }
+    .client.flip .client-img { order: 0; }
+    .client-img { min-height: 0; aspect-ratio: 1200 / 630; }
+  }
+
+  .own-head { margin-top: clamp(96px, 12vw, 150px); }
+  .games { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .game { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; background: var(--bg); transition: transform .4s var(--ease), border-color .3s, opacity .8s var(--ease); transition-delay: var(--d, 0ms); }
+  .game:hover { border-color: rgb(50 204 254 / .5); transform: translateY(-4px); }
+  .game-img { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--bg-2); }
+  .game-img img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+  .badge { position: absolute; top: 12px; left: 12px; font-size: 8px; background: var(--blue); color: var(--blue-ink); padding: 6px 8px 5px; border-radius: 6px; }
+  .game-body { padding: 24px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+  .game-body > p:not(.tag) { color: var(--muted); font-size: 15px; }
+  .game-foot { margin-top: auto; padding-top: 8px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+  @media (max-width: 960px) { .games { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 640px) { .games { grid-template-columns: 1fr; } }
+
+  /* process */
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; counter-reset: s; position: relative; }
+  .steps::before { content: ''; position: absolute; top: 15px; left: 0; right: 0; height: 2px; background: repeating-linear-gradient(90deg, var(--line-2) 0 8px, transparent 8px 16px); }
+  .step { position: relative; display: grid; gap: 12px; align-content: start; padding-top: 52px; transition-delay: var(--d, 0ms); }
+  .step::before { content: ''; position: absolute; top: 6px; left: 0; width: 20px; height: 20px; background: var(--bg); border: 3px solid var(--blue); }
+  .step:last-child::before { background: var(--blue); }
+  .lvl { color: var(--blue); font-size: 10px; }
+  .step p { color: var(--muted); font-size: 15px; }
+  @media (max-width: 900px) {
+    .steps { grid-template-columns: 1fr 1fr; row-gap: 40px; }
+    .steps::before { display: none; }
+  }
+  @media (max-width: 520px) { .steps { grid-template-columns: 1fr; } }
+
+  /* contact */
+  .contact-in { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(32px, 6vw, 88px); align-items: start; }
+  .contact-copy { display: grid; gap: 20px; position: sticky; top: 110px; }
+  .direct { margin-top: 12px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 15px; }
+  .direct ul { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; }
+  .direct a { color: var(--text); font-weight: 600; text-decoration-color: var(--blue); text-underline-offset: 4px; }
+  .form { display: grid; gap: 20px; padding: clamp(24px, 4vw, 40px); border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--bg-1); }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form label { display: grid; gap: 8px; }
+  .form label > span, legend { font-size: 14px; font-weight: 700; color: var(--text); }
+  .form input:not([type=radio]), .form textarea {
+    width: 100%; font: 500 16px/1.4 var(--font-body); color: var(--text);
+    background: var(--bg); border: 1px solid var(--line-2); border-radius: 12px; padding: 13px 14px;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .form textarea { resize: vertical; min-height: 140px; }
+  .form input:focus, .form textarea:focus { outline: 0; border-color: var(--blue); box-shadow: 0 0 0 4px rgb(50 204 254 / .14); }
+  .form ::placeholder { color: var(--faint); }
+  fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 10px; }
+  legend { padding: 0; margin-bottom: 10px; }
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill { display: inline-flex !important; cursor: pointer; }
+  .pill input { position: absolute; opacity: 0; pointer-events: none; }
+  .pill span { font-size: 14px; font-weight: 600; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--muted); transition: all .2s; }
+  .pill:hover span { color: var(--text); border-color: var(--faint); }
+  .pill input:checked + span { background: var(--blue); border-color: var(--blue); color: var(--blue-ink); }
+  .pill input:focus-visible + span { outline: 2px solid var(--blue); outline-offset: 3px; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .form-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+  .form-status { font-size: 15px; font-weight: 600; }
+  .form-status:global(.ok) { color: #3ee07f; }
+  .form-status:global(.err) { color: #ff6b6b; }
+  @media (max-width: 860px) {
+    .contact-in { grid-template-columns: 1fr; }
+    .contact-copy { position: static; }
+  }
+  @media (max-width: 560px) { .row { grid-template-columns: 1fr; } }
+
+  /* footer */
+  .foot { position: relative; border-top: 1px solid var(--line); padding: clamp(64px, 9vw, 110px) 0 32px; overflow: hidden; }
+  .foot-pattern { position: absolute; inset: 0; background-image: url('/brand/pattern.svg'); background-size: 240px auto; opacity: .06; mask-image: linear-gradient(to top, #000, transparent); -webkit-mask-image: linear-gradient(to top, #000, transparent); }
+  .foot-in { position: relative; display: grid; gap: clamp(40px, 6vw, 72px); }
+  .foot :global(.foot-logo) { width: min(100%, 760px); }
+  .foot-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 32px; padding-top: 24px; border-top: 1px solid var(--line); }
+  .foot-row .pixel { font-size: 9px; color: var(--muted); }
+  .foot-row .muted { color: var(--faint); font-size: 14px; margin-right: auto; }
+</style>

@@ -1,0 +1,315 @@
+---
+import Base from '../../layouts/Base.astro';
+import Logo from '../../components/Logo.astro';
+import { isAdmin, adminEnabled } from '../../lib/auth';
+import { getSettings, getLeads, getStats } from '../../lib/store';
+import { projects } from '../../data/content';
+
+const admin = isAdmin(Astro.cookies);
+const err = Astro.url.searchParams.get('e');
+const ok = Astro.url.searchParams.get('ok');
+const tabs = [
+  ['geral', 'Visão geral'],
+  ['mensagens', 'Mensagens'],
+  ['site', 'Site'],
+  ['projetos', 'Projetos'],
+  ['dados', 'Dados'],
+] as const;
+const tab = (tabs.find(([k]) => k === Astro.url.searchParams.get('tab'))?.[0]) ?? 'geral';
+
+const s = getSettings();
+const leads = admin ? getLeads() : [];
+const unread = leads.filter((l) => !l.read).length;
+const stats = admin ? getStats(30) : null;
+const max = stats ? Math.max(1, ...stats.series.map((d) => d.count)) : 1;
+const today = stats?.series.at(-1)?.count ?? 0;
+const week = stats ? stats.series.slice(-7).reduce((a, b) => a + b.count, 0) : 0;
+const order = s.projectOrder.length ? s.projectOrder : projects.map((p) => p.id);
+const sortedProjects = [...projects].sort((a, b) => (order.indexOf(a.id) + 1 || 99) - (order.indexOf(b.id) + 1 || 99));
+const fmt = (iso: string) => new Date(iso).toLocaleString('pt-BR', { timeZone: 'Europe/Madrid', dateStyle: 'short', timeStyle: 'short' });
+const okMsg: Record<string, string> = { saved: 'Alterações salvas.', deleted: 'Mensagem apagada.', reset: 'Estatísticas zeradas.' };
+---
+<Base title="Painel · Noob Perdido Studio" description="Painel" noindex>
+  {!admin ? (
+    <main class="login">
+      <form method="post" action="/painel/login" class="login-card">
+        <Logo class="login-logo" />
+        <p class="pixel eyebrow">Área restrita</p>
+        {!adminEnabled() ? (
+          <p class="alert">Painel desativado. Defina a variável <code>ADMIN_PASSWORD</code> (mínimo 8 caracteres) no servidor.</p>
+        ) : (
+          <>
+            <label><span>Senha</span><input type="password" name="password" required autofocus autocomplete="current-password" /></label>
+            {err && <p class="alert">{err === 'rate' ? 'Muitas tentativas. Espere alguns minutos.' : 'Senha incorreta.'}</p>}
+            <button class="btn" type="submit">Entrar</button>
+          </>
+        )}
+        <a href="/" class="back">← Voltar ao site</a>
+      </form>
+    </main>
+  ) : (
+    <div class="app">
+      <aside class="side">
+        <a href="/" class="side-logo" target="_blank" rel="noopener"><Logo animated={false} /></a>
+        <nav>
+          {tabs.map(([k, label]) => (
+            <a href={`/painel?tab=${k}`} aria-current={k === tab ? 'page' : undefined}>
+              {label}{k === 'mensagens' && unread > 0 && <span class="count">{unread}</span>}
+            </a>
+          ))}
+        </nav>
+        <form method="post" action="/painel/logout"><button class="linkbtn">Sair</button></form>
+      </aside>
+
+      <main class="main">
+        {ok && okMsg[ok] && <p class="toast" role="status">{okMsg[ok]}</p>}
+
+        {tab === 'geral' && stats && (
+          <section>
+            <h1>Visão geral</h1>
+            <div class="cards">
+              <div class="card"><span>Visitas hoje</span><b>{today}</b></div>
+              <div class="card"><span>Últimos 7 dias</span><b>{week}</b></div>
+              <div class="card"><span>Últimos 30 dias</span><b>{stats.total}</b></div>
+              <div class="card"><span>Mensagens não lidas</span><b>{unread}</b></div>
+            </div>
+            <div class="panel">
+              <h2>Visitas por dia</h2>
+              <div class="chart" role="img" aria-label="Visitas nos últimos 30 dias">
+                {stats.series.map((d) => (
+                  <div class="bar" style={`--h:${(d.count / max) * 100}%`} title={`${d.day}: ${d.count}`}><span>{d.count || ''}</span></div>
+                ))}
+              </div>
+              <div class="chart-axis"><span>{stats.series[0].day.slice(5)}</span><span>hoje</span></div>
+            </div>
+            <div class="two">
+              <div class="panel">
+                <h2>Por idioma</h2>
+                <ul class="kv">
+                  {[['/', 'Português'], ['/es/', 'Español'], ['/en/', 'English']].map(([k, n]) => <li><span>{n}</span><b>{stats.paths[k] || 0}</b></li>)}
+                </ul>
+              </div>
+              <div class="panel">
+                <h2>De onde vêm</h2>
+                {stats.topReferrers.length ? (
+                  <ul class="kv">{stats.topReferrers.map(([h, n]) => <li><span>{h}</span><b>{n}</b></li>)}</ul>
+                ) : <p class="muted">Ainda sem referências externas (acessos diretos não entram aqui).</p>}
+              </div>
+            </div>
+            <div class="panel status-row">
+              <div>
+                <h2>Estado do site</h2>
+                <p class="muted">{s.maintenance ? 'Em manutenção: visitantes veem a página "Voltamos já". Você continua vendo o site normal.' : 'No ar.'} {s.available ? 'Selo "Aceitando novos projetos" ativo.' : 'Selo "Agenda cheia" ativo.'}</p>
+              </div>
+              <form method="post" action="/painel/action">
+                <input type="hidden" name="action" value="toggleMaintenance" />
+                <button class={`btn ${s.maintenance ? '' : 'ghost'}`}>{s.maintenance ? 'Tirar da manutenção' : 'Ativar manutenção'}</button>
+              </form>
+            </div>
+          </section>
+        )}
+
+        {tab === 'mensagens' && (
+          <section>
+            <div class="head-row">
+              <h1>Mensagens</h1>
+              {leads.length > 0 && <a class="btn ghost small" href="/painel/export?f=csv">Exportar CSV</a>}
+            </div>
+            {leads.length === 0 ? (
+              <div class="panel empty"><p>Nenhuma mensagem ainda. Quando alguém usar o formulário do site, aparece aqui.</p></div>
+            ) : (
+              <ul class="leads">
+                {[...leads].sort((a, b) => Number(!!b.starred) - Number(!!a.starred)).map((l) => (
+                  <li class={`lead ${l.read ? 'read' : ''}`}>
+                    <div class="lead-top">
+                      <div>
+                        <b>{l.starred && '★ '}{l.name}</b> <a href={`mailto:${l.email}?subject=${encodeURIComponent('Noob Perdido Studio')}`}>{l.email}</a>
+                        <p class="muted small">{fmt(l.at)} · {l.type} · {l.lang.toUpperCase()}</p>
+                      </div>
+                      <div class="lead-actions">
+                        <form method="post" action="/painel/action"><input type="hidden" name="action" value="leadStar" /><input type="hidden" name="id" value={l.id} /><input type="hidden" name="value" value={l.starred ? '0' : '1'} /><button class="linkbtn">{l.starred ? 'Desmarcar' : 'Destacar'}</button></form>
+                        <form method="post" action="/painel/action"><input type="hidden" name="action" value="leadRead" /><input type="hidden" name="id" value={l.id} /><input type="hidden" name="value" value={l.read ? '0' : '1'} /><button class="linkbtn">{l.read ? 'Marcar não lida' : 'Marcar lida'}</button></form>
+                        <form method="post" action="/painel/action" class="confirm"><input type="hidden" name="action" value="leadDelete" /><input type="hidden" name="id" value={l.id} /><button class="linkbtn danger">Apagar</button></form>
+                      </div>
+                    </div>
+                    <p class="lead-msg">{l.message}</p>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        )}
+
+        {tab === 'site' && (
+          <section>
+            <h1>Site</h1>
+            <form method="post" action="/painel/action" class="panel form">
+              <input type="hidden" name="action" value="settings" />
+              <h2>Disponibilidade</h2>
+              <label class="switch"><input type="checkbox" name="available" checked={s.available} /><span>Aceitando novos projetos <em>(desligado mostra "Agenda cheia")</em></span></label>
+              <label class="switch"><input type="checkbox" name="maintenance" checked={s.maintenance} /><span>Modo manutenção <em>(visitantes veem "Voltamos já")</em></span></label>
+
+              <h2>Faixa de aviso no topo</h2>
+              <label class="switch"><input type="checkbox" name="announcementEnabled" checked={s.announcement.enabled} /><span>Mostrar faixa</span></label>
+              <label><span>Texto da faixa</span><input name="announcementText" value={s.announcement.text} maxlength="200" placeholder="Ex.: Vagas abertas para projetos em janeiro" /></label>
+
+              <h2>Contato</h2>
+              <div class="grid2">
+                <label><span>E-mail público</span><input type="email" name="email" value={s.email} /></label>
+                <label><span>WhatsApp (com DDI)</span><input name="whatsapp" value={s.whatsapp} placeholder="+34 600 000 000" /></label>
+                <label><span>Instagram</span><input name="instagram" value={s.instagram} placeholder="@noobperdido" /></label>
+                <label><span>Webhook de aviso (opcional)</span><input type="url" name="webhookUrl" value={s.webhookUrl} placeholder="https://discord.com/api/webhooks/…" /></label>
+              </div>
+              <p class="muted small">O webhook recebe um POST a cada nova mensagem do formulário (funciona com Discord, Slack, Google Chat, n8n, Zapier…).</p>
+              <div><button class="btn">Salvar</button></div>
+            </form>
+          </section>
+        )}
+
+        {tab === 'projetos' && (
+          <section>
+            <h1>Projetos</h1>
+            <form method="post" action="/painel/action" class="panel form">
+              <input type="hidden" name="action" value="projects" />
+              <p class="muted">Escolha o que aparece no site e em que ordem (número menor aparece primeiro, dentro de Clientes e de Criações próprias).</p>
+              <table class="ptable">
+                <thead><tr><th>Mostrar</th><th>Projeto</th><th>Tipo</th><th>Ordem</th></tr></thead>
+                <tbody>
+                  {sortedProjects.map((p, i) => (
+                    <tr>
+                      <td><input type="checkbox" name={`show:${p.id}`} checked={!s.hiddenProjects.includes(p.id)} aria-label={`Mostrar ${p.name}`} /></td>
+                      <td><b>{p.name}</b></td>
+                      <td class="muted">{p.kind === 'client' ? 'Cliente' : 'Própria'}</td>
+                      <td><input type="number" name={`order:${p.id}`} value={i + 1} min="1" max="99" class="num" aria-label={`Ordem de ${p.name}`} /></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div><button class="btn">Salvar</button></div>
+            </form>
+          </section>
+        )}
+
+        {tab === 'dados' && (
+          <section>
+            <h1>Dados</h1>
+            <div class="panel">
+              <h2>Backup</h2>
+              <p class="muted">Baixe tudo (configurações, mensagens e estatísticas) em JSON, ou só as mensagens em CSV para abrir no Excel/Numbers.</p>
+              <div class="btns"><a class="btn ghost" href="/painel/export">Backup completo (JSON)</a><a class="btn ghost" href="/painel/export?f=csv">Mensagens (CSV)</a></div>
+            </div>
+            <div class="panel">
+              <h2>Zerar estatísticas</h2>
+              <p class="muted">Apaga a contagem de visitas e as origens. Mensagens e configurações ficam.</p>
+              <form method="post" action="/painel/action" class="confirm"><input type="hidden" name="action" value="resetStats" /><button class="btn ghost danger">Zerar estatísticas</button></form>
+            </div>
+            <div class="panel">
+              <h2>Como entrar aqui</h2>
+              <p class="muted">O painel fica em <code>/painel</code> e não tem link no site. Atalhos: digitar <code>/painel</code> na barra de busca da home, ou o código Konami (↑ ↑ ↓ ↓ ← → ← → B A) em qualquer página.</p>
+            </div>
+          </section>
+        )}
+      </main>
+    </div>
+  )}
+  <script>
+    document.querySelectorAll('form.confirm').forEach((f) => f.addEventListener('submit', (e) => {
+      const b = f.querySelector('button');
+      if (b && !b.dataset.armed) { e.preventDefault(); b.dataset.armed = '1'; b.dataset.label = b.textContent || ''; b.textContent = 'Clique de novo para confirmar'; setTimeout(() => { delete b.dataset.armed; b.textContent = b.dataset.label || ''; }, 3000); }
+    }));
+  </script>
+</Base>
+
+<style>
+  .login { min-height: 100vh; display: grid; place-items: center; padding: 24px; background: radial-gradient(50% 40% at 50% 30%, rgb(50 204 254 / .12), transparent 70%); }
+  .login-card { width: min(100%, 380px); display: grid; gap: 18px; padding: 36px 28px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--bg-1); }
+  .login-card :global(.login-logo) { width: 200px; margin-bottom: 8px; }
+  .back { color: var(--faint); font-size: 14px; text-decoration: none; }
+  .alert { color: #ff8a8a; font-size: 14px; }
+  label { display: grid; gap: 8px; }
+  label > span { font-size: 14px; font-weight: 700; }
+  input:not([type=checkbox]) { width: 100%; font: 500 15px/1.4 var(--font-body); color: var(--text); background: var(--bg); border: 1px solid var(--line-2); border-radius: 10px; padding: 11px 12px; }
+  input:focus { outline: 0; border-color: var(--blue); box-shadow: 0 0 0 4px rgb(50 204 254 / .14); }
+  code { font-size: .9em; background: var(--bg-2); padding: 2px 6px; border-radius: 6px; color: var(--blue); }
+
+  .app { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+  .side { border-right: 1px solid var(--line); padding: 24px 16px; display: flex; flex-direction: column; gap: 28px; position: sticky; top: 0; height: 100vh; background: var(--bg-1); }
+  .side-logo { padding: 0 8px; }
+  .side-logo :global(svg) { width: 140px; }
+  .side nav { display: grid; gap: 2px; }
+  .side nav a { display: flex; justify-content: space-between; align-items: center; text-decoration: none; color: var(--muted); font-weight: 600; font-size: 15px; padding: 10px 12px; border-radius: 10px; }
+  .side nav a:hover { color: var(--text); background: var(--bg-2); }
+  .side nav a[aria-current] { color: var(--text); background: var(--bg-2); box-shadow: inset 3px 0 0 var(--blue); }
+  .count { background: var(--blue); color: var(--blue-ink); font-size: 12px; font-weight: 800; border-radius: 999px; padding: 1px 8px; }
+  .side form { margin-top: auto; padding: 0 12px; }
+  .linkbtn { background: none; border: 0; color: var(--muted); font: 600 14px var(--font-body); cursor: pointer; padding: 4px 0; }
+  .linkbtn:hover { color: var(--text); }
+  .danger { color: #ff8a8a !important; }
+
+  .main { padding: clamp(24px, 4vw, 48px); max-width: 1080px; width: 100%; }
+  .main h1 { font-size: 34px; margin-bottom: 24px; }
+  .main h2 { font-size: 18px; margin-bottom: 14px; }
+  .toast { background: rgb(62 224 127 / .1); border: 1px solid rgb(62 224 127 / .35); color: #8ff0b6; padding: 10px 14px; border-radius: 10px; margin-bottom: 20px; font-weight: 600; font-size: 14px; }
+  .muted { color: var(--muted); }
+  .small { font-size: 13px; }
+  .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+  .card { border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; display: grid; gap: 6px; background: var(--bg-1); }
+  .card span { color: var(--muted); font-size: 13px; font-weight: 600; }
+  .card b { font: 600 36px/1 var(--font-display); color: var(--blue); }
+  .panel { border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; background: var(--bg-1); margin-bottom: 16px; }
+  .panel.empty { text-align: center; color: var(--muted); padding: 48px 22px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .two .panel { margin-bottom: 0; }
+  .two + .panel { margin-top: 16px; }
+  .chart { display: flex; align-items: flex-end; gap: 3px; height: 160px; }
+  .bar { flex: 1; height: max(2px, var(--h)); background: linear-gradient(to top, var(--blue-deep), var(--blue)); border-radius: 3px 3px 0 0; position: relative; min-width: 4px; }
+  .bar span { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); font-size: 10px; color: var(--faint); padding-bottom: 2px; }
+  .chart-axis { display: flex; justify-content: space-between; color: var(--faint); font-size: 12px; margin-top: 8px; }
+  .kv { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .kv li { display: flex; justify-content: space-between; border-bottom: 1px solid var(--line); padding-bottom: 8px; font-size: 15px; }
+  .kv li:last-child { border-bottom: 0; }
+  .status-row { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .status-row h2 { margin-bottom: 6px; }
+
+  .head-row { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 24px; }
+  .head-row h1 { margin: 0; }
+  .btn.small { min-height: 38px; font-size: 14px; padding: 0 14px; }
+  .leads { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .lead { border: 1px solid var(--line); border-left: 3px solid var(--blue); border-radius: var(--radius); padding: 18px 20px; background: var(--bg-1); }
+  .lead.read { border-left-color: var(--line-2); opacity: .8; }
+  .lead-top { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .lead-top a { color: var(--blue); font-size: 14px; }
+  .lead-actions { display: flex; gap: 14px; align-items: start; }
+  .lead-msg { margin-top: 12px; white-space: pre-wrap; color: var(--text); font-size: 15px; }
+
+  .form { display: grid; gap: 16px; }
+  .form h2 { margin: 10px 0 0; }
+  .form h2:first-of-type { margin-top: 0; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .switch { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+  .switch span { font-weight: 600; font-size: 15px; }
+  .switch em { color: var(--faint); font-style: normal; font-weight: 500; }
+  .switch input { appearance: none; width: 42px; height: 24px; border-radius: 99px; background: var(--line-2); position: relative; flex: none; cursor: pointer; transition: background .2s; }
+  .switch input::after { content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: transform .2s var(--ease); }
+  .switch input:checked { background: var(--blue); }
+  .switch input:checked::after { transform: translateX(18px); }
+  .switch input:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+  .ptable { width: 100%; border-collapse: collapse; font-size: 15px; }
+  .ptable th { text-align: left; color: var(--faint); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: 8px; border-bottom: 1px solid var(--line); }
+  .ptable td { padding: 10px 8px; border-bottom: 1px solid var(--line); }
+  .ptable input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--blue); }
+  .num { width: 72px !important; }
+  .btns { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 14px; }
+  .panel form.confirm { margin-top: 14px; }
+
+  @media (max-width: 860px) {
+    .app { grid-template-columns: 1fr; }
+    .side { position: static; height: auto; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 12px; border-right: 0; border-bottom: 1px solid var(--line); padding: 14px 16px; }
+    .side-logo :global(svg) { width: 110px; }
+    .side nav { display: flex; overflow-x: auto; order: 3; width: 100%; }
+    .side nav a { white-space: nowrap; gap: 6px; }
+    .side form { margin: 0 0 0 auto; padding: 0; }
+    .cards { grid-template-columns: 1fr 1fr; }
+    .two, .grid2 { grid-template-columns: 1fr; }
+  }
+</style>

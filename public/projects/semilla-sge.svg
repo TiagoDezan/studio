@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="SGE, Iglesia Semilla de Vida">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f3d2e"/>
+      <stop offset="1" stop-color="#06201a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <g transform="translate(600 250)">
+    <path d="M0 90 C -10 40 -10 0 0 -40" stroke="#8fd694" stroke-width="10" fill="none" stroke-linecap="round"/>
+    <path d="M0 -10 C -60 -20 -90 -70 -80 -110 C -30 -100 0 -60 0 -10 Z" fill="#4caf50"/>
+    <path d="M0 -30 C 50 -50 90 -100 85 -140 C 35 -125 5 -80 0 -30 Z" fill="#8fd694"/>
+    <ellipse cx="0" cy="100" rx="70" ry="14" fill="#2e7d32" opacity="0.7"/>
+  </g>
+  <text x="600" y="470" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="68" font-weight="700" fill="#f1f8e9">SGE · Semilla de Vida</text>
+  <text x="600" y="530" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="28" fill="#a5d6a7" letter-spacing="2">MEMBERS · TREASURY · REPORTS · iOS APP</text>
+</svg>

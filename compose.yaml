@@ -1,0 +1,20 @@
+# Noob Perdido Studio (studio.noobperdido.com)
+# The container only listens on localhost; Plesk's nginx proxies the domain to it.
+services:
+  studio:
+    build: .
+    image: studio:latest
+    container_name: studio
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8406:4321"
+    environment:
+      # Set these in Komodo (or a .env file next to this compose file). Never commit them.
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      ADMIN_SECRET: ${ADMIN_SECRET:-}
+    volumes:
+      # settings, contact messages and visit stats (studio.json)
+      - studio-data:/data
+
+volumes:
+  studio-data:

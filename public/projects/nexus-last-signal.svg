@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="Nexus: Last Signal">
+  <defs>
+    <radialGradient id="g" cx="50%" cy="55%" r="60%">
+      <stop offset="0" stop-color="#1b2a6b"/>
+      <stop offset="0.55" stop-color="#0a0f29"/>
+      <stop offset="1" stop-color="#03040d"/>
+    </radialGradient>
+    <radialGradient id="ring" cx="50%" cy="50%" r="50%">
+      <stop offset="0.6" stop-color="#22e3ff" stop-opacity="0"/>
+      <stop offset="0.8" stop-color="#22e3ff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#b34cff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#g)"/>
+  <g fill="#ffffff" opacity="0.7">
+    <rect x="90" y="80" width="3" height="3"/><rect x="260" y="160" width="2" height="2"/><rect x="980" y="110" width="3" height="3"/>
+    <rect x="1100" y="260" width="2" height="2"/><rect x="150" y="520" width="2" height="2"/><rect x="1040" y="560" width="3" height="3"/>
+    <rect x="420" y="70" width="2" height="2"/><rect x="760" y="600" width="2" height="2"/><rect x="330" y="610" width="3" height="3"/>
+  </g>
+  <circle cx="600" cy="300" r="190" fill="url(#ring)"/>
+  <circle cx="600" cy="300" r="150" fill="none" stroke="#22e3ff" stroke-width="6" stroke-dasharray="18 10" opacity="0.8"/>
+  <circle cx="600" cy="300" r="118" fill="#03040d" stroke="#b34cff" stroke-width="3" opacity="0.9"/>
+  <path d="M520 300 h40 l14 -34 l20 68 l18 -52 l12 18 h56" fill="none" stroke="#4dffa6" stroke-width="5" stroke-linejoin="round"/>
+  <text x="600" y="545" text-anchor="middle" font-family="Menlo, Consolas, monospace" font-size="64" font-weight="700" fill="#e8f7ff" letter-spacing="6">NEXUS: LAST SIGNAL</text>
+  <text x="600" y="600" text-anchor="middle" font-family="Menlo, Consolas, monospace" font-size="24" fill="#22e3ff" letter-spacing="4">SCI-FI ACTION RPG · iPHONE &amp; iPAD · IN DEVELOPMENT</text>
+</svg>
