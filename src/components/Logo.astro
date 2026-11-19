@@ -1,8 +1,8 @@
 ---
-interface Props { class?: string; animated?: boolean; title?: string }
-const { class: cls = '', animated = true, title = 'Noob Perdido' } = Astro.props;
+interface Props { class?: string; animated?: boolean; follow?: boolean; title?: string }
+const { class: cls = '', animated = true, follow = false, title = 'Noob Perdido' } = Astro.props;
 ---
-<svg class={`np-logo ${animated ? 'is-animated' : ''} ${cls}`} viewBox="266 469 548 142" role="img" aria-label={title} xmlns="http://www.w3.org/2000/svg">
+<svg class={`np-logo ${animated ? 'is-animated' : ''} ${follow ? 'follow' : ''} ${cls}`} viewBox="266 469 548 142" role="img" aria-label={title} xmlns="http://www.w3.org/2000/svg">
   <g>
     <path class="ink" d="M354,562.83v6a15.74,15.74,0,0,1-15.76,15.75h-56v17.9h-7.44V547.08h63.42A15.84,15.84,0,0,1,354,562.83Zm-7.45,0a8.34,8.34,0,0,0-8.31-8.23h-56v22.48h56a8.4,8.4,0,0,0,8.31-8.23Z"/>
     <path class="ink" d="M369.44,571.07H441.1v7.52H369.44v8.23a8.21,8.21,0,0,0,8.16,8.24h63.5v7.44H377.6a15.72,15.72,0,0,1-15.68-15.68v-24a15.82,15.82,0,0,1,15.68-15.75h63.5v7.52H377.6a8.21,8.21,0,0,0-8.16,8.23Z"/>
@@ -35,8 +35,44 @@ const { class: cls = '', animated = true, title = 'Noob Perdido' } = Astro.props
     50% { transform: translate(-40px, -24px); }
     75% { transform: translate(-40px, 0); }
   }
+  .np-logo.following :global(.pupil) { animation: none; transition: transform .12s ease-out; }
   @keyframes np-blink { 50% { opacity: 0; } }
   @media (prefers-reduced-motion: reduce) {
     .is-animated :global(.pupil), .is-animated :global(.cursor) { animation: none; }
   }
 </style>
+
+<script>
+  // Eyes follow the pointer (logos with the `follow` prop). Pupils rest at the lower-right
+  // corner of each lens and can move up to 40 units left and 24 up (viewBox units).
+  const VB = { x: 266, w: 548, y: 469, h: 142 };
+  const RANGE = { x: 40, y: 24 };
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fine = matchMedia('(pointer: fine)').matches;
+  const logos = [...document.querySelectorAll<SVGSVGElement>('svg.np-logo.follow')];
+  if (logos.length && fine && !reduce) {
+    let mx = 0, my = 0, raf = 0;
+    const update = () => {
+      raf = 0;
+      for (const svg of logos) {
+        const r = svg.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > innerHeight) continue;
+        const k = r.width / VB.w;
+        svg.classList.add('following');
+        svg.querySelectorAll<SVGRectElement>('.pupil').forEach((pupil) => {
+          const px = Number(pupil.getAttribute('x')) + 4 - RANGE.x / 2;
+          const py = Number(pupil.getAttribute('y')) + 3.5 - RANGE.y / 2;
+          const cx = r.left + (px - VB.x) * k;
+          const cy = r.top + (py - VB.y) * k;
+          const dx = mx - cx, dy = my - cy;
+          const clamp = (v: number) => Math.max(-1, Math.min(1, v / 220));
+          const ox = clamp(dx) * (RANGE.x / 2);
+          const oy = clamp(dy) * (RANGE.y / 2);
+          pupil.style.transform = `translate(${(ox - RANGE.x / 2).toFixed(1)}px, ${(oy - RANGE.y / 2).toFixed(1)}px)`;
+        });
+      }
+    };
+    addEventListener('pointermove', (e) => { mx = e.clientX; my = e.clientY; if (!raf) raf = requestAnimationFrame(update); }, { passive: true });
+    addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(update); }, { passive: true });
+  }
+</script>

@@ -1,6 +1,9 @@
 import { promises as fs, readFileSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
+import { projects as defaultProjects, type Project } from '../data/content';
+
+export type StoredProject = Project & { visible: boolean; order: number };
 
 export interface Lead {
   id: string;
@@ -28,6 +31,8 @@ export interface Settings {
 
 interface Db {
   settings: Settings;
+  /** all projects shown on the site; seeded from src/data/content.ts on first run */
+  projects?: StoredProject[];
   leads: Lead[];
   /** visits[day][path] = count */
   visits: Record<string, Record<string, number>>;
@@ -63,6 +68,18 @@ try {
   db = defaults();
 }
 
+// seed projects from the code defaults (keeps earlier hide/order choices)
+if (!db.projects) {
+  const order = db.settings.projectOrder?.length ? db.settings.projectOrder : defaultProjects.map((p) => p.id);
+  db.projects = defaultProjects.map((p) => ({
+    ...structuredClone(p),
+    visible: !db.settings.hiddenProjects?.includes(p.id),
+    order: (order.indexOf(p.id) + 1) || 99,
+  }));
+}
+
+export const UPLOAD_DIR = path.join(DATA_DIR, 'uploads');
+
 let timer: NodeJS.Timeout | null = null;
 function save() {
   if (timer) return;
@@ -85,6 +102,28 @@ export function updateSettings(patch: Partial<Settings>) {
   db.settings = { ...db.settings, ...patch };
   save();
   return db.settings;
+}
+
+export const getProjects = (): StoredProject[] =>
+  [...(db.projects || [])].sort((a, b) => a.order - b.order);
+
+export function saveProject(p: StoredProject) {
+  const list = db.projects || (db.projects = []);
+  const i = list.findIndex((x) => x.id === p.id);
+  if (i >= 0) list[i] = p; else list.push(p);
+  save();
+}
+
+export function deleteProject(id: string) {
+  const p = db.projects?.find((x) => x.id === id);
+  db.projects = (db.projects || []).filter((x) => x.id !== id);
+  save();
+  return p;
+}
+
+export function setProjectsVisibility(map: Record<string, { visible: boolean; order: number }>) {
+  for (const p of db.projects || []) if (map[p.id]) Object.assign(p, map[p.id]);
+  save();
 }
 
 export function addLead(l: Omit<Lead, 'id' | 'at' | 'read'>): Lead {

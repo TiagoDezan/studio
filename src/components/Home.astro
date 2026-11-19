@@ -2,18 +2,16 @@
 import Base from '../layouts/Base.astro';
 import Logo from './Logo.astro';
 import Icon from './Icon.astro';
-import { t, pick, projects, langPath, langLabel, LANGS, type Lang, type Project } from '../data/content';
-import { getSettings } from '../lib/store';
+import { t, langPath, langLabel, LANGS, type Lang, type Project } from '../data/content';
+import { getSettings, getProjects } from '../lib/store';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const s = getSettings();
-const p = (v: Record<Lang, string>) => pick(v, lang);
+const p = (v?: Partial<Record<Lang, string>>) => (v?.[lang] || v?.pt || '');
 
-const order = s.projectOrder.length ? s.projectOrder : projects.map((x) => x.id);
-const visible = projects
-  .filter((x) => !s.hiddenProjects.includes(x.id))
-  .sort((a, b) => (order.indexOf(a.id) + 1 || 99) - (order.indexOf(b.id) + 1 || 99));
+const viewLabel = { pt: 'Ver projeto', es: 'Ver proyecto', en: 'View project' };
+const visible = getProjects().filter((x) => x.visible);
 const clients = visible.filter((x) => x.kind === 'client');
 const own = visible.filter((x) => x.kind === 'own');
 const examples = t.hero.searchExamples[lang];
@@ -33,7 +31,7 @@ const themeLabels = {
   <header class="top">
     <div class="wrap top-in">
       <a href={langPath[lang]} class="brand" aria-label="Noob Perdido Studio">
-        <Logo class="brand-logo" animated={false} />
+        <Logo class="brand-logo" animated={false} follow />
         <span class="pixel brand-tag">Studio</span>
       </a>
       <nav class="nav" aria-label="Main">
@@ -126,13 +124,13 @@ const themeLabels = {
             <div class="clients">
               {clients.map((c: Project, i: number) => (
                 <article class={`client reveal ${i % 2 ? 'flip' : ''}`}>
-                  <div class={`client-img ${c.imageFit === 'contain' ? 'is-logo' : ''}`} style={c.imageBg ? `background:${c.imageBg}` : undefined}><img src={c.image} alt={c.imageFit === 'contain' ? c.name : ''} loading="lazy" decoding="async" width="1200" height="630" /></div>
+                  <div class={`client-img ${c.imageFit === 'contain' ? 'is-logo' : ''}`} style={c.imageBg ? `background:${c.imageBg}` : undefined}>{c.image && <img src={c.image} alt={c.imageFit === 'contain' ? c.name : ''} loading="lazy" decoding="async" width="1200" height="630" />}</div>
                   <div class="client-body">
                     <p class="pixel tag">{p(c.tag)}</p>
                     <h3>{c.name}</h3>
                     <p>{p(c.summary)}</p>
-                    <ul class="chips">{c.stack.map((x) => <li>{x}</li>)}</ul>
-                    {c.url && <a class="btn ghost" href={c.url} target="_blank" rel="noopener">{c.urlLabel ? p(c.urlLabel) : c.url} <span aria-hidden="true">↗</span></a>}
+                    {c.stack.length > 0 && <ul class="chips">{c.stack.map((x) => <li>{x}</li>)}</ul>}
+                    {c.url && <a class="btn ghost" href={c.url} target="_blank" rel="noopener">{p(c.urlLabel) || viewLabel[lang]} <span aria-hidden="true">↗</span></a>}
                   </div>
                 </article>
               ))}
@@ -149,17 +147,17 @@ const themeLabels = {
             <div class="games">
               {own.map((g: Project, i: number) => (
                 <article class="game reveal" style={`--d:${i * 80}ms`}>
-                  <div class="game-img">
-                    <img src={g.image} alt="" loading="lazy" decoding="async" />
-                    {g.status && <span class="pixel badge">{p(g.status)}</span>}
+                  <div class={`game-img ${g.imageFit === 'contain' ? 'is-logo' : ''}`} style={g.imageBg ? `background:${g.imageBg}` : undefined}>
+                    {g.image && <img src={g.image} alt={g.imageFit === 'contain' ? g.name : ''} loading="lazy" decoding="async" />}
+                    {p(g.status) && <span class="pixel badge">{p(g.status)}</span>}
                   </div>
                   <div class="game-body">
                     <p class="pixel tag">{p(g.tag)}</p>
                     <h3>{g.name}</h3>
                     <p>{p(g.summary)}</p>
                     <div class="game-foot">
-                      <ul class="chips">{g.stack.map((x) => <li>{x}</li>)}</ul>
-                      {g.url && <a class="link-arrow" href={g.url} target="_blank" rel="noopener">{g.urlLabel ? p(g.urlLabel) : 'Info'} <span aria-hidden="true">↗</span></a>}
+                      {g.stack.length > 0 && <ul class="chips">{g.stack.map((x) => <li>{x}</li>)}</ul>}
+                      {g.url && <a class="link-arrow" href={g.url} target="_blank" rel="noopener">{p(g.urlLabel) || viewLabel[lang]} <span aria-hidden="true">↗</span></a>}
                     </div>
                   </div>
                 </article>
@@ -240,7 +238,7 @@ const themeLabels = {
   <footer class="foot">
     <div class="foot-pattern" aria-hidden="true"></div>
     <div class="wrap foot-in">
-      <Logo class="foot-logo" />
+      <Logo class="foot-logo" follow />
       <div class="foot-row">
         <p class="pixel">© {new Date().getFullYear()} Noob Perdido Studio</p>
         <p class="muted">{p(t.footer.rights)}</p>
@@ -483,6 +481,8 @@ const themeLabels = {
   .game:hover { border-color: rgb(50 204 254 / .5); transform: translateY(-4px); }
   .game-img { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--bg-2); }
   .game-img img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+  .game-img.is-logo { display: grid; place-items: center; padding: 28px; }
+  .game-img.is-logo img { width: 80%; height: 80%; object-fit: contain; }
   .badge { position: absolute; top: 12px; left: 12px; font-size: 8px; background: var(--blue); color: var(--blue-ink); padding: 6px 8px 5px; border-radius: 6px; }
   .game-body { padding: 24px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
   .game-body > p:not(.tag) { color: var(--muted); font-size: 15px; }
@@ -546,7 +546,7 @@ const themeLabels = {
   .foot { position: relative; border-top: 1px solid var(--line); padding: clamp(64px, 9vw, 110px) 0 32px; overflow: hidden; }
   .foot-pattern { position: absolute; inset: 0; background-image: var(--pattern); background-size: 240px auto; opacity: var(--pattern-opacity); mask-image: linear-gradient(to top, #000, transparent); -webkit-mask-image: linear-gradient(to top, #000, transparent); }
   .foot-in { position: relative; display: grid; gap: clamp(40px, 6vw, 72px); }
-  .foot :global(.foot-logo) { width: min(100%, 760px); }
+  .foot :global(.foot-logo) { width: min(100%, 760px); margin-inline: auto; }
   .foot-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 32px; padding-top: 24px; border-top: 1px solid var(--line); }
   .foot-row .pixel { font-size: 9px; color: var(--muted); }
   .foot-row .muted { color: var(--faint); font-size: 14px; margin-right: auto; }

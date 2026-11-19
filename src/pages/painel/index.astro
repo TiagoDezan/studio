@@ -2,8 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Logo from '../../components/Logo.astro';
 import { isAdmin, adminEnabled } from '../../lib/auth';
-import { getSettings, getLeads, getStats } from '../../lib/store';
-import { projects } from '../../data/content';
+import { getSettings, getLeads, getStats, getProjects } from '../../lib/store';
 
 const admin = isAdmin(Astro.cookies);
 const err = Astro.url.searchParams.get('e');
@@ -24,10 +23,16 @@ const stats = admin ? getStats(30) : null;
 const max = stats ? Math.max(1, ...stats.series.map((d) => d.count)) : 1;
 const today = stats?.series.at(-1)?.count ?? 0;
 const week = stats ? stats.series.slice(-7).reduce((a, b) => a + b.count, 0) : 0;
-const order = s.projectOrder.length ? s.projectOrder : projects.map((p) => p.id);
-const sortedProjects = [...projects].sort((a, b) => (order.indexOf(a.id) + 1 || 99) - (order.indexOf(b.id) + 1 || 99));
+const sortedProjects = admin ? getProjects() : [];
+const editId = Astro.url.searchParams.get('edit');
+const editing = editId === 'new' ? null : sortedProjects.find((p) => p.id === editId) ?? null;
+const showForm = tab === 'projetos' && (editId === 'new' || !!editing);
+const ep = editing;
+const pickerValue = ep?.imageBg && /^#[0-9a-fA-F]{6}$/.test(ep.imageBg) ? ep.imageBg : '#0d1114';
+const L = [['pt', 'Português'], ['es', 'Español'], ['en', 'English']] as const;
 const fmt = (iso: string) => new Date(iso).toLocaleString('pt-BR', { timeZone: 'Europe/Madrid', dateStyle: 'short', timeStyle: 'short' });
-const okMsg: Record<string, string> = { saved: 'Alterações salvas.', deleted: 'Mensagem apagada.', reset: 'Estatísticas zeradas.' };
+const okMsg: Record<string, string> = { saved: 'Alterações salvas.', deleted: 'Mensagem apagada.', reset: 'Estatísticas zeradas.', pdeleted: 'Projeto apagado.', missing: 'Dê um nome ao projeto.', badimg: 'Imagem inválida: use PNG, JPG, WebP, SVG, AVIF ou GIF de até 8 MB.' };
+const errKeys = ['missing', 'badimg'];
 ---
 <Base title="Painel · Noob Perdido Studio" description="Painel" noindex>
   {!admin ? (
@@ -62,7 +67,7 @@ const okMsg: Record<string, string> = { saved: 'Alterações salvas.', deleted: 
       </aside>
 
       <main class="main">
-        {ok && okMsg[ok] && <p class="toast" role="status">{okMsg[ok]}</p>}
+        {ok && okMsg[ok] && <p class={`toast ${errKeys.includes(ok) ? 'bad' : ''}`} role="status">{okMsg[ok]}</p>}
 
         {tab === 'geral' && stats && (
           <section>
@@ -166,27 +171,102 @@ const okMsg: Record<string, string> = { saved: 'Alterações salvas.', deleted: 
           </section>
         )}
 
-        {tab === 'projetos' && (
+        {tab === 'projetos' && !showForm && (
           <section>
-            <h1>Projetos</h1>
+            <div class="head-row">
+              <h1>Projetos</h1>
+              <a class="btn small" href="/painel?tab=projetos&edit=new">+ Novo projeto</a>
+            </div>
             <form method="post" action="/painel/action" class="panel form">
               <input type="hidden" name="action" value="projects" />
               <p class="muted">Escolha o que aparece no site e em que ordem (número menor aparece primeiro, dentro de Clientes e de Criações próprias).</p>
               <table class="ptable">
-                <thead><tr><th>Mostrar</th><th>Projeto</th><th>Tipo</th><th>Ordem</th></tr></thead>
+                <thead><tr><th>Mostrar</th><th></th><th>Projeto</th><th>Tipo</th><th>Ordem</th><th></th></tr></thead>
                 <tbody>
                   {sortedProjects.map((p, i) => (
                     <tr>
-                      <td><input type="checkbox" name={`show:${p.id}`} checked={!s.hiddenProjects.includes(p.id)} aria-label={`Mostrar ${p.name}`} /></td>
+                      <td><input type="checkbox" name={`show:${p.id}`} checked={p.visible} aria-label={`Mostrar ${p.name}`} /></td>
+                      <td><span class="thumb" style={p.imageBg ? `background:${p.imageBg}` : undefined}>{p.image && <img src={p.image} alt="" class={p.imageFit === 'contain' ? 'contain' : ''} />}</span></td>
                       <td><b>{p.name}</b></td>
                       <td class="muted">{p.kind === 'client' ? 'Cliente' : 'Própria'}</td>
                       <td><input type="number" name={`order:${p.id}`} value={i + 1} min="1" max="99" class="num" aria-label={`Ordem de ${p.name}`} /></td>
+                      <td><a href={`/painel?tab=projetos&edit=${p.id}`}>Editar</a></td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-              <div><button class="btn">Salvar</button></div>
+              <div><button class="btn">Salvar visibilidade e ordem</button></div>
             </form>
+          </section>
+        )}
+
+        {showForm && (
+          <section>
+            <p><a href="/painel?tab=projetos" class="back-link">← Projetos</a></p>
+            <h1>{ep ? `Editar ${ep.name}` : 'Novo projeto'}</h1>
+            <form method="post" action="/painel/action" enctype="multipart/form-data" class="panel form">
+              <input type="hidden" name="action" value="projectSave" />
+              {ep && <input type="hidden" name="id" value={ep.id} />}
+              <div class="grid2">
+                <label><span>Nome *</span><input name="name" required maxlength="120" value={ep?.name ?? ''} /></label>
+                <label><span>Tipo</span>
+                  <select name="kind">
+                    <option value="client" selected={ep?.kind === 'client'}>Cliente</option>
+                    <option value="own" selected={!ep || ep.kind === 'own'}>Criação própria</option>
+                  </select>
+                </label>
+                <label><span>Link (opcional)</span><input type="url" name="url" placeholder="https://…" value={ep?.url ?? ''} /></label>
+                <label><span>Tecnologias (separadas por vírgula)</span><input name="stack" placeholder="Swift, SwiftUI, Supabase" value={ep?.stack.join(', ') ?? ''} /></label>
+              </div>
+              <div class="switches">
+                <label class="switch"><input type="checkbox" name="visible" checked={ep ? ep.visible : true} /><span>Mostrar no site</span></label>
+                <label class="inline"><span>Ordem</span><input type="number" name="order" min="1" max="99" class="num" value={ep?.order ?? sortedProjects.length + 1} /></label>
+              </div>
+
+              <h2>Imagem</h2>
+              <div class="img-row">
+                <div class="preview" id="preview" style={ep?.imageBg ? `background:${ep.imageBg}` : undefined}>
+                  {ep?.image ? <img src={ep.image} alt="" class={ep.imageFit === 'contain' ? 'contain' : ''} /> : <span class="muted small">Sem imagem</span>}
+                </div>
+                <div class="img-fields">
+                  <label><span>Enviar imagem (PNG, JPG, WebP, SVG, até 8 MB)</span><input type="file" name="imageFile" accept="image/png,image/jpeg,image/webp,image/svg+xml,image/avif,image/gif" /></label>
+                  <label><span>Como mostrar</span>
+                    <select name="imageFit" id="imageFit">
+                      <option value="cover" selected={ep?.imageFit !== 'contain'}>Foto / banner (preenche o espaço)</option>
+                      <option value="contain" selected={ep?.imageFit === 'contain'}>Logo (centralizado sobre uma cor)</option>
+                    </select>
+                  </label>
+                  <label><span>Cor de fundo do logo</span><span class="color"><input type="color" id="bgpick" value={pickerValue} /><input name="imageBg" id="imageBg" placeholder="#3e4c59" value={ep?.imageBg ?? ''} maxlength="9" /></span></label>
+                  {ep?.image && <label class="switch"><input type="checkbox" name="removeImage" /><span>Remover a imagem atual</span></label>}
+                </div>
+              </div>
+
+              <h2>Textos</h2>
+              <p class="muted small">Só o português é obrigatório na prática: se espanhol ou inglês ficarem vazios, o site mostra o texto em português.</p>
+              <div class="langtabs" role="tablist">
+                {L.map(([k, n], i) => <button type="button" role="tab" class="ltab" data-l={k} aria-selected={i === 0 ? 'true' : 'false'}>{n}</button>)}
+              </div>
+              {L.map(([k], i) => (
+                <div class="lpane" data-l={k} hidden={i !== 0}>
+                  <label><span>Etiqueta curta</span><input name={`tag_${k}`} maxlength="80" placeholder={k === 'pt' ? 'Ex.: App + web' : ''} value={ep?.tag?.[k] ?? ''} /></label>
+                  <label><span>Descrição</span><textarea name={`summary_${k}`} rows="4" maxlength="700">{ep?.summary?.[k] ?? ''}</textarea></label>
+                  <div class="grid2">
+                    <label><span>Texto do botão (opcional)</span><input name={`urlLabel_${k}`} maxlength="60" placeholder={k === 'pt' ? 'Ver projeto' : k === 'es' ? 'Ver proyecto' : 'View project'} value={ep?.urlLabel?.[k] ?? ''} /></label>
+                    <label><span>Selo na imagem (opcional)</span><input name={`status_${k}`} maxlength="40" placeholder={k === 'pt' ? 'Ex.: Em desenvolvimento' : ''} value={ep?.status?.[k] ?? ''} /></label>
+                  </div>
+                </div>
+              ))}
+              <div class="form-actions">
+                <button class="btn">Salvar projeto</button>
+                <a class="btn ghost" href="/painel?tab=projetos">Cancelar</a>
+              </div>
+            </form>
+            {ep && (
+              <form method="post" action="/painel/action" class="confirm del-form">
+                <input type="hidden" name="action" value="projectDelete" /><input type="hidden" name="id" value={ep.id} />
+                <button class="btn ghost danger">Apagar este projeto</button>
+              </form>
+            )}
           </section>
         )}
 
@@ -213,6 +293,29 @@ const okMsg: Record<string, string> = { saved: 'Alterações salvas.', deleted: 
     </div>
   )}
   <script>
+    // project editor: language tabs, colour picker, live preview
+    document.querySelectorAll<HTMLButtonElement>('.ltab').forEach((b) => b.addEventListener('click', () => {
+      document.querySelectorAll<HTMLButtonElement>('.ltab').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
+      document.querySelectorAll<HTMLElement>('.lpane').forEach((p) => (p.hidden = p.dataset.l !== b.dataset.l));
+    }));
+    const pick = document.getElementById('bgpick') as HTMLInputElement | null;
+    const bg = document.getElementById('imageBg') as HTMLInputElement | null;
+    const prev = document.getElementById('preview');
+    const fit = document.getElementById('imageFit') as HTMLSelectElement | null;
+    const paint = () => { if (prev && bg) prev.style.background = /^#[0-9a-f]{3,8}$/i.test(bg.value) ? bg.value : ''; };
+    pick?.addEventListener('input', () => { if (bg) bg.value = pick.value; paint(); });
+    bg?.addEventListener('input', () => { if (pick && /^#[0-9a-f]{6}$/i.test(bg.value)) pick.value = bg.value; paint(); });
+    fit?.addEventListener('change', () => prev?.querySelector('img')?.classList.toggle('contain', fit.value === 'contain'));
+    document.querySelector<HTMLInputElement>('input[name=imageFile]')?.addEventListener('change', (e) => {
+      const f = (e.target as HTMLInputElement).files?.[0];
+      if (!f || !prev) return;
+      prev.innerHTML = '';
+      const img = document.createElement('img');
+      img.src = URL.createObjectURL(f);
+      if (fit?.value === 'contain') img.className = 'contain';
+      prev.appendChild(img);
+    });
+
     document.querySelectorAll('form.confirm').forEach((f) => f.addEventListener('submit', (e) => {
       const b = f.querySelector('button');
       if (b && !b.dataset.armed) { e.preventDefault(); b.dataset.armed = '1'; b.dataset.label = b.textContent || ''; b.textContent = 'Clique de novo para confirmar'; setTimeout(() => { delete b.dataset.armed; b.textContent = b.dataset.label || ''; }, 3000); }
@@ -299,6 +402,33 @@ const okMsg: Record<string, string> = { saved: 'Alterações salvas.', deleted: 
   .ptable td { padding: 10px 8px; border-bottom: 1px solid var(--line); }
   .ptable input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--blue); }
   .num { width: 72px !important; }
+  .toast.bad { background: rgb(255 107 107 / .1); border-color: rgb(255 107 107 / .4); color: #e04848; }
+  .thumb { display: block; width: 64px; height: 40px; border-radius: 6px; overflow: hidden; background: var(--bg-2); }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .thumb img.contain { object-fit: contain; padding: 4px; }
+  .ptable a, .back-link { color: var(--accent); font-weight: 600; font-size: 14px; }
+  .back-link { text-decoration: none; display: inline-block; margin-bottom: 8px; }
+  select { width: 100%; font: 500 15px/1.4 var(--font-body); color: var(--text); background: var(--bg); border: 1px solid var(--line-2); border-radius: 10px; padding: 11px 12px; }
+  textarea { width: 100%; font: 500 15px/1.5 var(--font-body); color: var(--text); background: var(--bg); border: 1px solid var(--line-2); border-radius: 10px; padding: 11px 12px; resize: vertical; }
+  textarea:focus, select:focus { outline: 0; border-color: var(--blue); box-shadow: 0 0 0 4px rgb(50 204 254 / .14); }
+  .switches { display: flex; flex-wrap: wrap; gap: 24px; align-items: center; }
+  label.inline { display: flex; align-items: center; gap: 10px; }
+  .img-row { display: grid; grid-template-columns: 260px 1fr; gap: 20px; align-items: start; }
+  .preview { aspect-ratio: 1200 / 630; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-2); display: grid; place-items: center; overflow: hidden; }
+  .preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .preview img.contain { object-fit: contain; padding: 14%; }
+  .img-fields { display: grid; gap: 14px; }
+  input[type=file] { padding: 9px !important; }
+  .color { display: flex !important; gap: 8px; align-items: center; }
+  .color input[type=color] { width: 46px; height: 42px; padding: 2px; border: 1px solid var(--line-2); border-radius: 10px; background: var(--bg); flex: none; }
+  .langtabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); }
+  .ltab { background: none; border: 0; border-bottom: 2px solid transparent; color: var(--muted); font: 700 14px var(--font-body); padding: 10px 14px; cursor: pointer; margin-bottom: -1px; }
+  .ltab[aria-selected='true'] { color: var(--text); border-bottom-color: var(--blue); }
+  .lpane { display: grid; gap: 14px; }
+  .lpane[hidden] { display: none; }
+  .form-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .del-form { margin-top: 8px; }
+  @media (max-width: 700px) { .img-row { grid-template-columns: 1fr; } .ptable th:nth-child(2), .ptable td:nth-child(2) { display: none; } }
   .btns { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 14px; }
   .panel form.confirm { margin-top: 14px; }
 
