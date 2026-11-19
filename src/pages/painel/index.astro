@@ -230,7 +230,7 @@ const okMsg: Record<string, string> = { saved: 'Alterações salvas.', deleted: 
   label > span { font-size: 14px; font-weight: 700; }
   input:not([type=checkbox]) { width: 100%; font: 500 15px/1.4 var(--font-body); color: var(--text); background: var(--bg); border: 1px solid var(--line-2); border-radius: 10px; padding: 11px 12px; }
   input:focus { outline: 0; border-color: var(--blue); box-shadow: 0 0 0 4px rgb(50 204 254 / .14); }
-  code { font-size: .9em; background: var(--bg-2); padding: 2px 6px; border-radius: 6px; color: var(--blue); }
+  code { font-size: .9em; background: var(--bg-2); padding: 2px 6px; border-radius: 6px; color: var(--accent); }
 
   .app { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
   .side { border-right: 1px solid var(--line); padding: 24px 16px; display: flex; flex-direction: column; gap: 28px; position: sticky; top: 0; height: 100vh; background: var(--bg-1); }
@@ -249,13 +249,13 @@ const okMsg: Record<string, string> = { saved: 'Alterações salvas.', deleted: 
   .main { padding: clamp(24px, 4vw, 48px); max-width: 1080px; width: 100%; }
   .main h1 { font-size: 34px; margin-bottom: 24px; }
   .main h2 { font-size: 18px; margin-bottom: 14px; }
-  .toast { background: rgb(62 224 127 / .1); border: 1px solid rgb(62 224 127 / .35); color: #8ff0b6; padding: 10px 14px; border-radius: 10px; margin-bottom: 20px; font-weight: 600; font-size: 14px; }
+  .toast { background: rgb(62 224 127 / .1); border: 1px solid rgb(62 224 127 / .35); color: #1fa55a; padding: 10px 14px; border-radius: 10px; margin-bottom: 20px; font-weight: 600; font-size: 14px; }
   .muted { color: var(--muted); }
   .small { font-size: 13px; }
   .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
   .card { border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; display: grid; gap: 6px; background: var(--bg-1); }
   .card span { color: var(--muted); font-size: 13px; font-weight: 600; }
-  .card b { font: 600 36px/1 var(--font-display); color: var(--blue); }
+  .card b { font: 600 36px/1 var(--font-display); color: var(--accent); }
   .panel { border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; background: var(--bg-1); margin-bottom: 16px; }
   .panel.empty { text-align: center; color: var(--muted); padding: 48px 22px; }
   .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -278,7 +278,7 @@ const okMsg: Record<string, string> = { saved: 'Alterações salvas.', deleted: 
   .lead { border: 1px solid var(--line); border-left: 3px solid var(--blue); border-radius: var(--radius); padding: 18px 20px; background: var(--bg-1); }
   .lead.read { border-left-color: var(--line-2); opacity: .8; }
   .lead-top { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-  .lead-top a { color: var(--blue); font-size: 14px; }
+  .lead-top a { color: var(--accent); font-size: 14px; }
   .lead-actions { display: flex; gap: 14px; align-items: start; }
   .lead-msg { margin-top: 12px; white-space: pre-wrap; color: var(--text); font-size: 15px; }
 
