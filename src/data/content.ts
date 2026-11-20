@@ -115,6 +115,7 @@ export const t = {
     },
   },
   nav: {
+    ai: { pt: 'Consultoria IA', es: 'Consultoría IA', en: 'AI consulting' },
     services: { pt: 'Serviços', es: 'Servicios', en: 'Services' },
     work: { pt: 'Projetos', es: 'Proyectos', en: 'Work' },
     process: { pt: 'Como funciona', es: 'Cómo trabajamos', en: 'Process' },
@@ -146,6 +147,76 @@ export const t = {
     { value: '3', label: { pt: 'plataformas: web, iOS e Android', es: 'plataformas: web, iOS y Android', en: 'platforms: web, iOS and Android' } },
     { value: '4', label: { pt: 'idiomas entregues nos apps', es: 'idiomas entregados en las apps', en: 'languages shipped in our apps' } },
   ],
+  ai: {
+    eyebrow: { pt: 'Carro-chefe', es: 'Servicio estrella', en: 'Flagship service' },
+    title: {
+      pt: 'Consultoria IA: a inteligência artificial trabalhando na sua empresa',
+      es: 'Consultoría IA: la inteligencia artificial trabajando en tu empresa',
+      en: 'AI consulting: artificial intelligence at work in your company',
+    },
+    lead: {
+      pt: 'Sem hype e sem jargão. A gente descobre onde a IA economiza tempo e dinheiro no seu negócio, integra nos sistemas que você já usa e treina a sua equipe para aproveitar no dia a dia.',
+      es: 'Sin humo y sin jerga. Descubrimos dónde la IA ahorra tiempo y dinero en tu negocio, la integramos en los sistemas que ya usas y formamos a tu equipo para sacarle partido cada día.',
+      en: 'No hype, no jargon. We find where AI saves time and money in your business, plug it into the systems you already use and train your team to get value from it every day.',
+    },
+    cta: { pt: 'Agendar um diagnóstico', es: 'Reservar un diagnóstico', en: 'Book an assessment' },
+    trust: {
+      pt: 'Privacidade em primeiro lugar: projetos alinhados ao RGPD e à Lei de IA europeia, com os seus dados sob controle.',
+      es: 'La privacidad primero: proyectos alineados con el RGPD y la Ley de IA europea, con tus datos bajo control.',
+      en: 'Privacy first: projects aligned with the GDPR and the EU AI Act, with your data under your control.',
+    },
+    items: [
+      {
+        title: { pt: 'Diagnóstico de IA', es: 'Diagnóstico de IA', en: 'AI assessment' },
+        body: {
+          pt: 'Mapeamos processos e dados para achar onde a IA traz retorno de verdade, com prioridade, custo e prazo de cada ideia.',
+          es: 'Analizamos procesos y datos para encontrar dónde la IA da retorno real, con prioridad, coste y plazo de cada idea.',
+          en: 'We map your processes and data to find where AI really pays off, with priority, cost and timeline for each idea.',
+        },
+      },
+      {
+        title: { pt: 'Assistentes e agentes', es: 'Asistentes y agentes', en: 'Assistants and agents' },
+        body: {
+          pt: 'Chatbots que respondem com base nos seus documentos, atendimento no site e no WhatsApp, e agentes que preenchem, classificam e resumem por você.',
+          es: 'Chatbots que responden con tus propios documentos, atención en la web y en WhatsApp, y agentes que rellenan, clasifican y resumen por ti.',
+          en: 'Chatbots that answer from your own documents, support on your site and WhatsApp, and agents that fill in, sort and summarize for you.',
+        },
+      },
+      {
+        title: { pt: 'Automação e integração', es: 'Automatización e integración', en: 'Automation and integration' },
+        body: {
+          pt: 'IA conectada ao seu CRM, ERP, planilhas e e-mail: relatórios automáticos, triagem de pedidos e extração de dados de PDFs e faturas.',
+          es: 'IA conectada a tu CRM, ERP, hojas de cálculo y correo: informes automáticos, clasificación de pedidos y extracción de datos de PDFs y facturas.',
+          en: 'AI wired into your CRM, ERP, spreadsheets and email: automatic reports, request triage and data extraction from PDFs and invoices.',
+        },
+      },
+      {
+        title: { pt: 'IA dentro do seu produto', es: 'IA dentro de tu producto', en: 'AI inside your product' },
+        body: {
+          pt: 'Recursos inteligentes no seu app ou SaaS: busca que entende o que a pessoa quis dizer, recomendações, geração de conteúdo e análise de dados.',
+          es: 'Funciones inteligentes en tu app o SaaS: búsqueda que entiende lo que quiso decir el usuario, recomendaciones, generación de contenido y análisis de datos.',
+          en: 'Smart features in your app or SaaS: search that understands intent, recommendations, content generation and data analysis.',
+        },
+      },
+      {
+        title: { pt: 'Treinamento de equipes', es: 'Formación de equipos', en: 'Team training' },
+        body: {
+          pt: 'Workshops práticos para a equipe usar IA com segurança no dia a dia, com guias e prompts feitos para a sua área.',
+          es: 'Talleres prácticos para que tu equipo use la IA con seguridad cada día, con guías y prompts pensados para tu sector.',
+          en: 'Hands-on workshops so your team uses AI safely every day, with guides and prompts built for your field.',
+        },
+      },
+    ],
+  },
+  game: {
+    start: { pt: 'Press start', es: 'Press start', en: 'Press start' },
+    help: { pt: '← → mover · espaço atirar · Esc sair', es: '← → mover · espacio disparar · Esc salir', en: '← → move · space shoot · Esc quit' },
+    helpTouch: { pt: 'Arraste para mover · toque para atirar', es: 'Arrastra para mover · toca para disparar', en: 'Drag to move · tap to shoot' },
+    over: { pt: 'Fim de jogo', es: 'Fin del juego', en: 'Game over' },
+    again: { pt: 'Clique para jogar de novo', es: 'Haz clic para jugar otra vez', en: 'Click to play again' },
+    wave: { pt: 'Fase', es: 'Fase', en: 'Wave' },
+    quit: { pt: 'Sair do jogo', es: 'Salir del juego', en: 'Quit game' },
+  },
   services: {
     eyebrow: { pt: 'Power-ups', es: 'Power-ups', en: 'Power-ups' },
     title: { pt: 'O que a gente faz', es: 'Lo que hacemos', en: 'What we do' },
@@ -228,9 +299,9 @@ export const t = {
     email: { pt: 'E-mail', es: 'Correo electrónico', en: 'Email' },
     type: { pt: 'Tipo de projeto', es: 'Tipo de proyecto', en: 'Project type' },
     types: {
-      pt: ['App mobile', 'Site', 'Sistema / SaaS', 'Jogo', 'Ainda não sei'],
-      es: ['App móvil', 'Web', 'Sistema / SaaS', 'Juego', 'Aún no lo sé'],
-      en: ['Mobile app', 'Website', 'System / SaaS', 'Game', 'Not sure yet'],
+      pt: ['Consultoria IA', 'App mobile', 'Site', 'Sistema / SaaS', 'Jogo', 'Ainda não sei'],
+      es: ['Consultoría IA', 'App móvil', 'Web', 'Sistema / SaaS', 'Juego', 'Aún no lo sé'],
+      en: ['AI consulting', 'Mobile app', 'Website', 'System / SaaS', 'Game', 'Not sure yet'],
     },
     message: { pt: 'Sobre o projeto', es: 'Sobre el proyecto', en: 'About the project' },
     messagePh: { pt: 'O que você quer construir, para quem e até quando?', es: '¿Qué quieres construir, para quién y para cuándo?', en: 'What do you want to build, for whom and by when?' },
