@@ -123,6 +123,37 @@ export const projects: Project[] = [
     url: 'https://tiagodezan.github.io/games_policy/block-quest/',
     urlLabel: { pt: 'Mais informações', es: 'Más información', en: 'More info' },
   },
+  {
+    id: 'desaas',
+    kind: 'own',
+    name: 'De-SaaS',
+    tag: { pt: 'Gestão de empresas · web e iPhone', es: 'Gestión de empresas · web e iPhone', en: 'Business management · web & iPhone' },
+    summary: {
+      pt: 'Gestão para pequenas empresas na Espanha: CRM, clientes, orçamentos, faturas e recibos, receitas e despesas, folha de pagamento espanhola (nóminas), controle de ponto, férias, documentos e relatórios. Várias empresas por conta, com permissões por cargo e login com dois fatores.',
+      es: 'Gestión para pequeñas empresas en España: CRM, clientes, presupuestos, facturas y recibos, ingresos y gastos, nóminas, control horario, vacaciones, documentos e informes. Varias empresas por cuenta, con permisos por rol e inicio de sesión con doble factor.',
+      en: 'Management for small businesses in Spain: CRM, clients, quotes, invoices and receipts, income and expenses, Spanish payroll (nóminas), time tracking, vacations, documents and reports. Several companies per account, role-based access and two-factor login.',
+    },
+    stack: ['React', 'TypeScript', 'Supabase', 'SwiftUI', 'WidgetKit'],
+    image: '/projects/desaas-1.webp',
+    url: 'https://finance.dezan.me',
+    urlLabel: { pt: 'Abrir o De-SaaS', es: 'Abrir De-SaaS', en: 'Open De-SaaS' },
+    appStore: 'https://apps.apple.com/us/app/de-saas/id6835661981',
+  },
+  {
+    id: 'lacesta',
+    kind: 'own',
+    name: 'LaCesta',
+    tag: { pt: 'Lista de compras e orçamento · iPhone', es: 'Lista de la compra y presupuesto · iPhone', en: 'Grocery list & budget · iPhone' },
+    summary: {
+      pt: 'O assistente de compras do supermercado: marque o que vai pro carrinho e veja na hora quanto ainda pode gastar, com avisos em 80 % e 90 % do orçamento. Listas que aprendem ("2 leite, pão"), leitor de código de barras, histórico de preços e sugestões de onde sai mais barato. Sem contas, sem anúncios, sem rastreamento.',
+      es: 'Tu asistente de compras en el súper: marca lo que metes en el carrito y mira al momento cuánto te queda, con avisos al 80 % y al 90 % del presupuesto. Listas que aprenden ("2 leche, pan"), escáner de código de barras, historial de precios y dónde sale más barato. Sin cuentas, sin anuncios, sin rastreo.',
+      en: 'Your supermarket shopping assistant: tick what goes in the cart and see right away how much you have left, with alerts at 80% and 90% of the budget. Lists that learn ("2 milk, bread"), barcode scanner, price history and where it is cheaper. No accounts, no ads, no tracking.',
+    },
+    stack: ['Swift', 'SwiftUI'],
+    image: '/projects/lacesta-1.webp',
+    gallery: ['/projects/lacesta-1.webp', '/projects/lacesta-2.webp'],
+    status: { pt: 'Em breve na App Store', es: 'Muy pronto en el App Store', en: 'Coming soon to the App Store' },
+  },
 ];
 
 export const t = {
@@ -282,8 +313,8 @@ export const t = {
   work: {
     clientsEyebrow: { pt: 'Clientes', es: 'Clientes', en: 'Clients' },
     clientsTitle: { pt: 'Quem já encontrou o caminho com a gente', es: 'Quien ya encontró el camino con nosotros', en: 'Who already found the way with us' },
-    ownEyebrow: { pt: 'Criações próprias', es: 'Creaciones propias', en: 'Our own games' },
-    ownTitle: { pt: 'Jogos que a gente cria por diversão (e muito teste)', es: 'Juegos que creamos por diversión (y muchas pruebas)', en: 'Games we make for fun (and a lot of testing)' },
+    ownEyebrow: { pt: 'Criações próprias', es: 'Creaciones propias', en: 'Our own apps & games' },
+    ownTitle: { pt: 'Apps e jogos que a gente cria (e testa muito)', es: 'Apps y juegos que creamos (y probamos mucho)', en: 'Apps and games we make (and test a lot)' },
     details: { pt: 'Ver detalhes', es: 'Ver detalles', en: 'View details' },
     close: { pt: 'Fechar', es: 'Cerrar', en: 'Close' },
     site: { pt: 'Visitar o site', es: 'Visitar la web', en: 'Visit website' },

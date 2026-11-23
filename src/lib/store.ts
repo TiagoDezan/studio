@@ -105,6 +105,19 @@ if (!db.migrations.includes('store-placeholders-v1')) {
   queueMicrotask(() => save());
 }
 
+// new projects added in code after the first seed (only if missing, so a deletion in /painel is not undone twice)
+if (!db.migrations.includes('add-desaas-lacesta-v1')) {
+  for (const id of ['desaas', 'lacesta']) {
+    const d = defaultProjects.find((x) => x.id === id);
+    if (d && !db.projects?.some((x) => x.id === id)) {
+      const max = Math.max(0, ...(db.projects ?? []).map((x) => (x.order < 99 ? x.order : 0)));
+      (db.projects ??= []).push({ ...structuredClone(d), visible: true, order: max + 1 });
+    }
+  }
+  db.migrations.push('add-desaas-lacesta-v1');
+  queueMicrotask(() => save());
+}
+
 export const UPLOAD_DIR = path.join(DATA_DIR, 'uploads');
 
 let timer: NodeJS.Timeout | null = null;
