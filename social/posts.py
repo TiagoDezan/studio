@@ -1,10 +1,10 @@
-"""Content of the December 2026 Instagram plan: slides (HTML bodies) and captions."""
+"""Content of the Dec 2026 / Jan 2027 Instagram plan for @studio.noobperdido (English)."""
 import json
 
-HT_DEV = '#gamedev #indiedev #indiegame #pixelart #devlog #iosgames #jogosindie #noobperdido'
-HT_GAMES = '#indiegame #iosgames #jogosmobile #puzzlegame #gamedev #jogosindie #noobperdido'
-HT_KIDS = '#jogoseducativos #matematica #educacao #paisefilhos #iosgames #indiegame #noobperdido'
-HT_STUDIO = '#desenvolvimentodeapps #desenvolvimentoweb #startup #saas #apps #ia #noobperdido'
+HT_DEV = '#gamedev #indiedev #indiegame #pixelart #devlog #iosgames #madewithswift #noobperdido'
+HT_GAMES = '#indiegame #iosgames #mobilegames #puzzlegame #gamedev #indiedev #noobperdido'
+HT_KIDS = '#educationalgames #mathgames #kidsapps #homeschool #parenting #iosgames #noobperdido'
+HT_STUDIO = '#appdevelopment #webdevelopment #startup #saas #iosdev #ai #noobperdido'
 
 P = []
 
@@ -17,99 +17,92 @@ def phones(*srcs, h=820):
     return '<div class="phones">' + ''.join(f'<img src="{{A}}{s}" style="height:{h}px">' for s in srcs) + '</div>'
 
 
-# 1 ─ Prazer, Noob Perdido Studio
-post('01-prazer', '2026-12-02T20:00:00', 'Estúdio', 'OLÁ, MUNDO', """
-Prazer, Noob Perdido Studio 👓
+PH = 'border-radius:36px;border:3px solid rgba(50,204,254,.45)'
 
-A gente faz apps, sites, sistemas e jogos. E agora também ajuda empresas a usar IA sem hype.
+# 1 ─ Hello
+post('01-hello', '2026-12-02T20:00:00', 'Studio', 'HELLO, WORLD', """
+Hi, we're Noob Perdido Studio 👓
 
-Arrasta para o lado e conhece:
-• o que a gente faz
-• como a gente trabalha, em quatro fases
-• o que vai aparecer por aqui toda semana
+We build apps, websites, custom systems and games. And now we help businesses use AI without the hype.
 
-Perdido com a sua ideia? A gente acha o caminho. Conte a sua em studio.noobperdido.com (link na bio).
+Swipe to see:
+• what we do
+• how we work, in four levels
+• what you'll find here every week
 
-🇪🇸 Hola, somos Noob Perdido Studio: apps, webs, sistemas y juegos.
-🇺🇸 Hi, we're Noob Perdido Studio: apps, websites, systems and games.
+Lost with your idea? We'll find the way. Tell us about it at studio.noobperdido.com (link in bio).
 
-#noobperdido #gamedev #desenvolvimentodeapps #indiedev #apps #startup
+#noobperdido #gamedev #indiedev #appdevelopment #startup #iosdev
 """, [
     dict(html="""<div style="display:flex;flex-direction:column;gap:56px;align-items:flex-start">
 <img src="{A}glasses.svg" style="width:520px;filter:drop-shadow(0 0 40px rgba(50,204,254,.5))">
-<h1 class="xl">PRAZER,<br><span class="b">NOOB PERDIDO</span><br>STUDIO</h1>
-<p class="lead">Perdido com a sua ideia?<br>A gente acha o caminho.</p></div>"""),
-    dict(html="""<h1>O QUE A<br><span class="b">GENTE FAZ</span></h1>
+<h1 class="xl">HI, WE'RE<br><span class="b">NOOB PERDIDO</span><br>STUDIO</h1>
+<p class="lead">Lost with your idea?<br>We'll find the way.</p></div>"""),
+    dict(html="""<h1>WHAT<br><span class="b">WE DO</span></h1>
 <ul class="list">
-<li><div>Apps para iPhone e Android<small>Nativos, rápidos e prontos para a App Store</small></div></li>
-<li><div>Sites que convertem<small>Bonitos, leves e feitos para vender</small></div></li>
-<li><div>Sistemas e SaaS sob medida<small>Do painel interno ao produto completo</small></div></li>
-<li><div>Jogos mobile<small>Os nossos e os seus</small></div></li>
-<li><div>Consultoria de IA<small>Sem hype e sem jargão</small></div></li></ul>"""),
-    dict(html="""<h1 class="sm">QUATRO FASES,<br><span class="b">NENHUM CHEFÃO</span><br>SURPRESA</h1>
+<li><div>iPhone and Android apps<small>Native, fast and App Store ready</small></div></li>
+<li><div>Websites that convert<small>Beautiful, light and built to sell</small></div></li>
+<li><div>Custom systems and SaaS<small>From internal dashboards to full products</small></div></li>
+<li><div>Mobile games<small>Ours and yours</small></div></li>
+<li><div>AI consulting<small>No hype, no jargon</small></div></li></ul>"""),
+    dict(html="""<h1 class="sm">FOUR LEVELS,<br><span class="b">NO SURPRISE</span><br>BOSS FIGHT</h1>
 <div class="steps">
-<div class="step"><span class="k">FASE 1</span><h3>Conversa</h3><p>Entendemos a ideia, o público e o orçamento.</p></div>
-<div class="step"><span class="k">FASE 2</span><h3>Protótipo</h3><p>Você vê e toca antes de investir pesado.</p></div>
-<div class="step"><span class="k">FASE 3</span><h3>Construção</h3><p>Entregas semanais, sem caixa-preta.</p></div>
-<div class="step"><span class="k">FASE 4</span><h3>No ar</h3><p>Publicamos e seguimos junto depois.</p></div></div>"""),
-    dict(html="""<h1>TODA SEMANA<br><span class="b">POR AQUI</span></h1>
+<div class="step"><span class="k">LEVEL 1</span><h3>Chat</h3><p>We learn the idea, the audience and the budget.</p></div>
+<div class="step"><span class="k">LEVEL 2</span><h3>Prototype</h3><p>You see and tap it before investing big.</p></div>
+<div class="step"><span class="k">LEVEL 3</span><h3>Build</h3><p>Weekly deliveries, no black box.</p></div>
+<div class="step"><span class="k">LEVEL 4</span><h3>Launch</h3><p>We ship it and stay with you after.</p></div></div>"""),
+    dict(html="""<h1>EVERY WEEK<br><span class="b">RIGHT HERE</span></h1>
 <ul class="list">
-<li><div>Segunda: Devlog do Nexus<small>O nosso RPG em desenvolvimento</small></div></li>
-<li><div>Quarta: Nossos jogos<small>Block Quest e Operação: Zero Absoluto</small></div></li>
-<li><div>Sexta: Estúdio<small>Cases, bastidores e IA</small></div></li></ul>
-<div class="cta">CONTE A SUA IDEIA ▶<br>STUDIO.NOOBPERDIDO.COM</div>"""),
+<li><div>Monday: Nexus devlog<small>Our action RPG in development</small></div></li>
+<li><div>Wednesday: Our games<small>Block Quest and Operation Absolute Zero</small></div></li>
+<li><div>Friday: Studio<small>Case studies, behind the scenes and AI</small></div></li></ul>
+<div class="cta">TELL US YOUR IDEA ▶<br>STUDIO.NOOBPERDIDO.COM</div>"""),
 ])
 
-# 2 ─ Nossos jogos
-post('02-nossos-jogos', '2026-12-03T20:00:00', 'Jogos', 'NOSSOS JOGOS', """
-Três jogos, um estúdio 🎮
+# 2 ─ Our games
+post('02-our-games', '2026-12-03T20:00:00', 'Games', 'OUR GAMES', """
+Three games, one studio 🎮
 
-🛰️ Nexus: Last Signal: RPG de ação em pixel art para iPhone e iPad. Em desenvolvimento, com devlog toda segunda.
-🧮 Operação: Zero Absoluto: espiões mirins salvam a rede mundial hackeando firewalls com matemática. Para 7 a 12 anos, sem anúncios.
-🧩 Block Quest: puzzle de blocos em cinco mundos mágicos. Sem anúncios e sem cronômetro.
+🛰️ Nexus: Last Signal: a pixel art action RPG for iPhone and iPad. In development, with a devlog every Monday.
+🧮 Operation Absolute Zero: young spies save the world network by hacking firewalls with math. Ages 7 to 12, no ads.
+🧩 Block Quest: The Lost Jewel: a block puzzle across five magical worlds. Out now on the App Store.
 
-Qual você quer conhecer primeiro? Conta nos comentários 👇
-
-🇪🇸 Tres juegos: Nexus (en desarrollo), Operación: Cero Absoluto y Block Quest.
-🇺🇸 Three games: Nexus (in development), Operation: Absolute Zero and Block Quest.
+Which one do you want to see first? Tell us in the comments 👇
 
 """ + HT_GAMES, [
-    dict(html="""<h1 class="xl">NOSSOS<br><span class="b">JOGOS</span></h1>
+    dict(html="""<h1 class="xl">OUR<br><span class="b">GAMES</span></h1>
 <div class="row" style="justify-content:space-between">
 <img src="{A}nexus-icon.jpg" style="width:290px;border-radius:64px;border:3px solid rgba(50,204,254,.5)">
 <img src="{A}zero-icon.png" style="width:290px;border-radius:64px;border:3px solid rgba(50,204,254,.5)">
-<img src="{A}pt-BR-iphone-1-inicio.jpg" style="width:290px;height:290px;object-fit:cover;object-position:50% 22%;border-radius:64px;border:3px solid rgba(50,204,254,.5)"></div>
-<p class="lead">Um em desenvolvimento.<br>Dois prontos para jogar.</p>"""),
-    dict(html="""<span class="status">EM DESENVOLVIMENTO</span>
+<img src="{A}en-bq-1.jpg" style="width:290px;height:290px;object-fit:cover;object-position:50% 22%;border-radius:64px;border:3px solid rgba(50,204,254,.5)"></div>
+<p class="lead">One in development.<br>Two ready to play.</p>"""),
+    dict(html="""<span class="status">IN DEVELOPMENT</span>
 <h1 class="sm">NEXUS:<br><span class="b">LAST SIGNAL</span></h1>
 <div class="media" style="flex:0 0 520px"><img src="{A}G02_benjamin_concept.jpg" style="object-position:50% 30%"></div>
-<p>RPG de ação para iPhone e iPad. Pixel art 3/4, combate híbrido e 8 capítulos.</p>"""),
-    dict(html="""<span class="status ok">PRONTO</span>
-<h1 class="sm">OPERAÇÃO:<br><span class="b">ZERO ABSOLUTO</span></h1>
+<p>Action RPG for iPhone and iPad. 3/4 pixel art, hybrid combat and 8 chapters.</p>"""),
+    dict(html="""<span class="status ok">READY</span>
+<h1 class="sm">OPERATION<br><span class="b">ABSOLUTE ZERO</span></h1>
 <div class="row" style="flex:1;min-height:0;align-items:stretch">
-<img src="{A}iphone-6.9-01-hack.jpg" style="height:800px;border-radius:32px;border:3px solid rgba(50,204,254,.45)">
-<div style="display:flex;flex-direction:column;gap:28px;justify-content:center"><p>Matemática vira missão de espionagem.</p><p class="small">7 a 12 anos · 300 missões · sem anúncios</p></div></div>"""),
-    dict(html="""<span class="status ok">PRONTO</span>
-<h1 class="sm">BLOCK<br><span class="b">QUEST</span></h1>
+<img src="{A}en-zero-1.jpg" style="height:800px;""" + PH + """">
+<div style="display:flex;flex-direction:column;gap:28px;justify-content:center"><p>Math becomes a spy mission.</p><p class="small">Ages 7–12 · 300 missions · no ads</p></div></div>"""),
+    dict(html="""<span class="status ok">OUT NOW</span>
+<h1 class="sm">BLOCK QUEST:<br><span class="b">THE LOST JEWEL</span></h1>
 <div class="row" style="flex:1;min-height:0;align-items:stretch">
-<img src="{A}pt-BR-iphone-2-floresta-esmeralda.jpg" style="height:800px;border-radius:32px;border:3px solid rgba(50,204,254,.45)">
-<div style="display:flex;flex-direction:column;gap:28px;justify-content:center"><p>Encaixe peças, limpe linhas e cumpra a missão de cada fase.</p><p class="small">5 mundos · sem anúncios · sem cronômetro</p></div></div>"""),
+<img src="{A}en-bq-2.jpg" style="height:800px;""" + PH + """">
+<div style="display:flex;flex-direction:column;gap:28px;justify-content:center"><p>Fit pieces, clear lines and beat each level's mission.</p><p class="small">5 worlds · no ads · no timers</p></div></div>"""),
 ])
 
 # 3 ─ Block Quest Reel
-post('03-bq-reel', '2026-12-04T20:00:00', 'Jogos', 'BLOCK QUEST', """
-Block Quest em 30 segundos 🧩✨
+post('03-bq-reel', '2026-12-04T20:00:00', 'Games', 'BLOCK QUEST', """
+Block Quest: The Lost Jewel in 30 seconds 🧩✨
 
-Encaixe peças num tabuleiro 8×8, limpe linhas e cumpra a missão de cada fase. Floresta Esmeralda, Vale do Fogo, Oceano de Cristal, Reino Celestial e mais.
+Fit pieces on an 8×8 board, clear lines and beat each level's mission. Emerald Forest, Fire Valley, Crystal Ocean, Celestial Kingdom and more.
 
-✔️ Sem anúncios
-✔️ Sem cronômetro
-✔️ Capítulo 1 grátis
+✔️ No ads
+✔️ No timers
+✔️ Chapter 1 free
 
-Para iPhone e iPad. Link na bio.
-
-🇪🇸 Puzle de bloques en cinco mundos mágicos. Sin anuncios y sin cronómetro.
-🇺🇸 A block puzzle across five magical worlds. No ads, no timers.
+Out now for iPhone and iPad. Link in bio.
 
 """ + HT_GAMES, ig_type='REEL', media=['03-bq-reel.mp4'])
 
@@ -117,204 +110,186 @@ Para iPhone e iPad. Link na bio.
 post('04-devlog-1', '2026-12-07T20:00:00', 'Devlog', 'DEVLOG #1', """
 Devlog #1 · Nexus: Last Signal 🛰️
 
-Ano 2479. A humanidade cruza as estrelas pelo Nexus, uma rede de portais alienígenas. Há 17 anos, a primeira colônia, Resplendor, sumiu sem pedir socorro.
+Year 2479. Humanity crosses the stars through the Nexus, a network of alien gates. Seventeen years ago, the first colony, New Aurora, vanished without a distress call.
 
-Agora chegou um sinal de lá. A mensagem diz só uma coisa:
-"A porta nunca deveria ter sido aberta."
+Now a signal has come from there. The message says only one thing:
+"The door was never meant to open."
 
-Nexus: Last Signal é o nosso RPG de ação para iPhone e iPad: pixel art 3/4, combate híbrido e 8 capítulos. Toda segunda a gente mostra um pedaço do desenvolvimento por aqui.
+Nexus: Last Signal is our action RPG for iPhone and iPad: 3/4 pixel art, hybrid combat and 8 chapters. Every Monday we'll share a piece of its development here.
 
-Ativa as notificações para não perder o sinal 📡
-
-🇪🇸 Año 2479. Una señal llega de la primera colonia perdida. Devlog cada lunes.
-🇺🇸 Year 2479. A signal arrives from the first lost colony. New devlog every Monday.
+Turn on notifications so you don't miss the signal 📡
 
 """ + HT_DEV, [
     dict(html="""<div class="media"><img src="{A}G02_benjamin_concept.jpg" style="object-position:50% 25%"></div>
 <h1>NEXUS:<br><span class="b">LAST SIGNAL</span></h1>"""),
-    dict(html="""<h1 class="xl">ANO<br><span class="b">2479.</span></h1>
-<p class="lead">A humanidade cruza as estrelas pelo Nexus, uma rede de portais alienígenas.</p>
-<p>Há 17 anos, a primeira colônia, Resplendor, sumiu sem pedir socorro. Depois vieram outras.</p>
+    dict(html="""<h1 class="xl">YEAR<br><span class="b">2479.</span></h1>
+<p class="lead">Humanity crosses the stars through the Nexus, a network of alien gates.</p>
+<p>Seventeen years ago, the first colony, New Aurora, vanished without a distress call. Others followed.</p>
 <div class="media" style="flex:0 0 330px"><img src="{A}G01_art_bible_a.jpg" style="object-position:85% 70%"></div>"""),
-    dict(html="""<h1>O <span class="b">SINAL</span></h1>
-<p>Benjamin, ex-agente da AEGIS, recebe uma mensagem vinda de Resplendor:</p>
-<div class="quote">"A porta nunca deveria ter sido aberta."</div>
+    dict(html="""<h1>THE <span class="b">SIGNAL</span></h1>
+<p>Benjamin, a former AEGIS agent, receives a message from New Aurora:</p>
+<div class="quote">"The door was never meant to open."</div>
 <div class="row" style="justify-content:center;gap:60px;margin-top:20px">
 <img class="px" src="{A}portrait_benjamin.png" style="width:300px">
 <img class="px" src="{A}portrait_orion.png" style="width:300px"></div>"""),
-    dict(html="""<h1>O QUE<br><span class="b">VEM AÍ</span></h1>
+    dict(html="""<h1>WHAT'S<br><span class="b">COMING</span></h1>
 <ul class="list">
-<li>Pixel art em perspectiva 3/4</li>
-<li>Combate híbrido: armas, esquiva e habilidades</li>
-<li>8 capítulos, 8 chefões</li>
-<li>iPhone e iPad, com save no iCloud</li></ul>
+<li>Pixel art in 3/4 perspective</li>
+<li>Hybrid combat: weapons, dodge and skills</li>
+<li>8 chapters, 8 bosses</li>
+<li>iPhone and iPad, with iCloud saves</li></ul>
 <div class="row" style="justify-content:space-between">
 <img class="px" src="{A}portrait_benjamin.png" style="width:200px"><img class="px" src="{A}portrait_isabela.png" style="width:200px">
 <img class="px" src="{A}portrait_orion.png" style="width:200px"><img class="px" src="{A}portrait_survivor.png" style="width:200px"></div>"""),
 ])
 
-# 5 ─ Zero Absoluto
-post('05-zero-absoluto', '2026-12-09T20:00:00', 'Jogos', 'ZERO ABSOLUTO', """
-Operação: Zero Absoluto 🧮🕵️
+# 5 ─ Operation Absolute Zero
+post('05-absolute-zero', '2026-12-09T20:00:00', 'Games', 'ABSOLUTE ZERO', """
+Operation Absolute Zero 🧮🕵️
 
-Uma IA rebelde tomou a rede mundial. Só uma equipe de espiões mirins pode derrubar os firewalls, e a arma deles é a matemática.
+Cipher-Zero, a mischievous AI, has hacked the world network. Only a team of young spies can break its shields, and their weapon is math.
 
-• 300 missões em 3 operações
-• A dificuldade se ajusta ao ritmo da criança
-• Painel dos pais para acompanhar cada habilidade
-• Sem anúncios e sem coleta de dados
+• 300 missions across 3 operations
+• Difficulty adapts to each child
+• Parent dashboard to follow every skill
+• No ads, no purchases, no data collection
 
-Para crianças de 7 a 12 anos, no iPhone e no iPad. Marca aquele pai ou mãe que precisa conhecer 👇
-
-🇪🇸 Pequeños espías salvan la red con matemáticas. De 7 a 12 años, sin anuncios.
-🇺🇸 Young spies save the network with math. Ages 7 to 12, no ads.
+For kids aged 7 to 12, on iPhone and iPad. Tag a parent who needs to see this 👇
 
 """ + HT_KIDS, [
     dict(html="""<div class="media"><img src="{A}zero-cipher.jpg" style="object-position:50% 45%"></div>
-<h1 class="sm">OPERAÇÃO:<br><span class="b">ZERO ABSOLUTO</span></h1>
-<p class="lead">Matemática que vira missão.</p>"""),
+<h1 class="sm">OPERATION<br><span class="b">ABSOLUTE ZERO</span></h1>
+<p class="lead">Math becomes a mission.</p>"""),
     dict(html="""<div class="row" style="flex:1;min-height:0;align-items:center;gap:48px">
-<img src="{A}iphone-6.9-01-hack.jpg" style="height:960px;border-radius:36px;border:3px solid rgba(50,204,254,.45)">
-<div style="display:flex;flex-direction:column;gap:30px"><h2>HACKEIE COM CONTAS</h2><p>Espiões mirins derrubam firewalls resolvendo operações para salvar a rede de uma IA rebelde.</p></div></div>"""),
+<img src="{A}en-zero-1.jpg" style="height:960px;""" + PH + """">
+<div style="display:flex;flex-direction:column;gap:30px"><h2>HACK WITH MATH</h2><p>Young spies break firewalls by building equations to stop a rogue AI.</p></div></div>"""),
     dict(html="""<div class="row" style="flex:1;min-height:0;align-items:center;gap:48px">
-<div style="display:flex;flex-direction:column;gap:30px"><h2>300 MISSÕES</h2><p>Três operações, do metrô abandonado à nuvem. A dificuldade acompanha a criança.</p></div>
-<img src="{A}iphone-6.9-02-map.jpg" style="height:960px;border-radius:36px;border:3px solid rgba(50,204,254,.45)"></div>"""),
+<div style="display:flex;flex-direction:column;gap:30px"><h2>300 MISSIONS</h2><p>Three operations, from an abandoned subway to the cloud. The difficulty grows with the child.</p></div>
+<img src="{A}en-zero-2.jpg" style="height:960px;""" + PH + """"></div>"""),
     dict(html="""<div class="row" style="flex:1;min-height:0;align-items:center;gap:48px">
-<img src="{A}iphone-6.9-03-parent.jpg" style="height:960px;border-radius:36px;border:3px solid rgba(50,204,254,.45)">
-<div style="display:flex;flex-direction:column;gap:30px"><h2>PAINEL DOS PAIS</h2><p>Veja o que a criança domina e onde precisa de reforço.</p><p class="small">Sem anúncios. Nenhum dado sai do aparelho.</p></div></div>"""),
+<img src="{A}en-zero-3.jpg" style="height:960px;""" + PH + """">
+<div style="display:flex;flex-direction:column;gap:30px"><h2>PARENT DASHBOARD</h2><p>See what your child has mastered and where they need practice.</p><p class="small">No ads. No data leaves the device.</p></div></div>"""),
 ])
 
 # 6 ─ Case Reunio
-post('06-case-reunio', '2026-12-11T20:00:00', 'Estúdio', 'CASE', """
-Case: Reunio ⛪📱
+post('06-case-reunio', '2026-12-11T20:00:00', 'Studio', 'CASE STUDY', """
+Case study: Reunio ⛪📱
 
-O Reunio nasceu dentro de uma igreja de verdade, a partir do sistema que fizemos para a Semilla de Vida. Hoje é um SaaS que atende várias igrejas na web, no iPhone e no Android.
+Reunio was born inside a real church, from the system we built for Iglesia Semilla de Vida. Today it's a SaaS serving several churches on the web, iPhone and Android.
 
-O que entregamos:
-• Membros, tesouraria completa, escalas e avisos
-• Notificações push
-• Espanhol, português e inglês, com modo escuro
-• App na App Store
+What we delivered:
+• Members, full treasury, rotas and announcements
+• Push notifications
+• Spanish, Portuguese and English, with dark mode
+• App live on the App Store
 
-Tem uma ideia que poderia virar um produto assim? Chama no direct ou em studio.noobperdido.com.
-
-🇪🇸 Reunio: gestión de iglesias en web, iOS y Android, hecho por nosotros.
-🇺🇸 Reunio: church management on web, iOS and Android, built by us.
+Have an idea that could become a product like this? DM us or visit studio.noobperdido.com.
 
 """ + HT_STUDIO, [
-    dict(html="""<h1>CASE:<br><span class="b">REUNIO</span></h1>
-<p class="lead">De uma igreja para várias.</p>
+    dict(html="""<h1>CASE STUDY:<br><span class="b">REUNIO</span></h1>
+<p class="lead">From one church to many.</p>
 <div class="media" style="flex:0 0 520px;background:#0b0d10"><img src="{A}reunio-1.webp" style="object-fit:contain"></div>
-<p>Gestão de igrejas na web, no iPhone e no Android.</p>"""),
+<p>Church management on web, iPhone and Android.</p>"""),
     dict(html="""<div class="row" style="flex:1;min-height:0;align-items:center;gap:48px">
-<img src="{A}reunio-01-inicio.jpg" style="height:960px;border-radius:36px;border:3px solid rgba(50,204,254,.45)">
-<div style="display:flex;flex-direction:column;gap:30px"><h2>COMO NASCEU</h2><p>Começou como o sistema de gestão da Iglesia Semilla de Vida. Virou um SaaS para muitas igrejas.</p><p class="small">Web · iPhone · Android</p></div></div>"""),
-    dict(html="""<h1>O QUE<br><span class="b">ENTREGAMOS</span></h1>
-<ul class="list"><li>Membros, tesouraria, escalas e avisos</li><li>Notificações push</li><li>Espanhol, português e inglês</li><li>App na App Store</li></ul>
+<img src="{A}en-reunio-1.jpg" style="height:960px;""" + PH + """">
+<div style="display:flex;flex-direction:column;gap:30px"><h2>HOW IT STARTED</h2><p>It began as the management system for Iglesia Semilla de Vida and grew into a SaaS for many churches.</p><p class="small">Web · iPhone · Android</p></div></div>"""),
+    dict(html="""<h1>WHAT WE<br><span class="b">DELIVERED</span></h1>
+<ul class="list"><li>Members, treasury, rotas and announcements</li><li>Push notifications</li><li>Spanish, Portuguese and English</li><li>Live on the App Store</li></ul>
 <div class="chips"><span class="chip o">REACT</span><span class="chip o">TYPESCRIPT</span><span class="chip o">SUPABASE</span><span class="chip o">SWIFTUI</span></div>
-<div class="cta">TEM UMA IDEIA ASSIM? ▶<br>FALE COM A GENTE</div>"""),
+<div class="cta">GOT AN IDEA LIKE THIS? ▶<br>TALK TO US</div>"""),
 ])
 
 # 7 ─ Devlog #2 Benjamin
 post('07-devlog-2', '2026-12-14T20:00:00', 'Devlog', 'DEVLOG #2', """
-Devlog #2 · Conheça o Benjamin 🎨
+Devlog #2 · Meet Benjamin 🎨
 
-Ex-agente de operações especiais da AEGIS, 30 anos. Reservado, observador, decide rápido. É ele quem recebe o sinal de Resplendor.
+Former AEGIS special operations agent, 30. Quiet, observant, decides fast. He's the one who receives the signal from New Aurora.
 
-Arrasta para ver o caminho dele até o jogo:
-1. Conceito: a armadura, o visor e a paleta
-2. Turnaround: frente, costas e perfil, para manter o personagem igual de todos os ângulos
-3. Sprite: o pixel art que você controla no iPhone
+Swipe to follow his path into the game:
+1. Concept: the armor, the visor and the palette
+2. Turnaround: front, back and side, so he looks the same from every angle
+3. Sprite: the pixel art you control on your iPhone
 
-Qual parte do processo você quer ver no próximo devlog?
-
-🇪🇸 De la ilustración al sprite: así nació Benjamin.
-🇺🇸 From concept to sprite: meet Benjamin.
+Which part of the process should we show in the next devlog?
 
 """ + HT_DEV, [
     dict(html="""<div class="media"><img src="{A}G02_benjamin_concept.jpg" style="object-position:50% 20%"></div>
-<h1>CONHEÇA O<br><span class="b">BENJAMIN</span></h1>"""),
-    dict(html="""<h2>1 CONCEITO ▶ 2 TURNAROUND</h2>
-<p>Frente, costas e perfil desenhados juntos, para o personagem ficar igual de todos os ângulos.</p>
+<h1>MEET<br><span class="b">BENJAMIN</span></h1>"""),
+    dict(html="""<h2>1 CONCEPT ▶ 2 TURNAROUND</h2>
+<p>Front, back and side drawn together, so the character looks the same from every angle.</p>
 <div class="media" style="flex:0 0 auto;background:#ff00ff"><img src="{A}G02_benjamin_turnaround.jpg" style="height:auto"></div>
-<p class="small">O fundo rosa é proposital: ele é removido na hora de virar sprite.</p>"""),
+<p class="small">The pink background is on purpose: it gets removed when the art becomes a sprite.</p>"""),
     dict(html="""<h2>3 SPRITE</h2>
-<p>O pixel art que você controla: parado, andando, correndo e interagindo.</p>
+<p>The pixel art you control: idle, walking, running and interacting.</p>
 <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:40px;align-items:center">
 <div style="width:880px;height:220px;background:url({A}benjamin_south_idle.png) 0 0/880px 220px no-repeat;image-rendering:pixelated"></div>
 <div style="width:960px;height:160px;background:url({A}benjamin_east_run.png) 0 0/960px 160px no-repeat;image-rendering:pixelated"></div></div>"""),
 ])
 
 # 8 ─ Block Quest robot
-post('08-bq-robo', '2026-12-16T20:00:00', 'Jogos', 'BLOCK QUEST', """
-Um robô joga cada fase do Block Quest antes de você 🤖🧩
+post('08-bq-robot', '2026-12-16T20:00:00', 'Games', 'BLOCK QUEST', """
+A robot plays every Block Quest level before you do 🤖🧩
 
-Por trás dos cinco mundos tem dois segredos:
-• Um gerador de peças justo: nada de fase impossível por azar
-• Um robô que testa cada nível e garante que dá para vencer
+Behind the five worlds there are two secrets:
+• A fair piece generator: no level is impossible because of bad luck
+• A bot that tests every level and makes sure it can be beaten
 
-O resultado é um puzzle desafiador, mas nunca injusto. E sem anúncios nem cronômetro, no seu ritmo.
+The result is a puzzle that's challenging but never unfair. No ads and no timers, at your own pace.
 
-Capítulo 1 grátis no iPhone e iPad. Link na bio.
-
-🇪🇸 Un robot prueba cada nivel antes que tú. Sin anuncios, sin cronómetro.
-🇺🇸 A bot tests every level before you play it. No ads, no timers.
+Block Quest: The Lost Jewel. Chapter 1 is free on iPhone and iPad. Link in bio.
 
 """ + HT_GAMES, [
     dict(html="""<div class="row" style="flex:1;min-height:0;align-items:center;gap:44px">
-<img src="{A}pt-BR-iphone-1-inicio.jpg" style="height:980px;border-radius:36px;border:3px solid rgba(50,204,254,.45)">
-<h1 class="sm">UM <span class="b">ROBÔ</span> TESTA CADA FASE</h1></div>"""),
+<img src="{A}en-bq-1.jpg" style="height:980px;""" + PH + """">
+<h1 class="sm">A <span class="b">ROBOT</span> TESTS EVERY LEVEL</h1></div>"""),
     dict(html="""<div class="row" style="flex:1;min-height:0;align-items:center;gap:44px">
-<div style="display:flex;flex-direction:column;gap:30px"><h2>TABULEIRO 8×8</h2><p>Encaixe peças, limpe linhas e cumpra a missão de cada fase.</p></div>
-<img src="{A}pt-BR-iphone-2-floresta-esmeralda.jpg" style="height:980px;border-radius:36px;border:3px solid rgba(50,204,254,.45)"></div>"""),
+<div style="display:flex;flex-direction:column;gap:30px"><h2>8×8 BOARD</h2><p>Fit pieces, clear lines and beat each level's mission.</p></div>
+<img src="{A}en-bq-2.jpg" style="height:980px;""" + PH + """"></div>"""),
     dict(html="""<div class="row" style="flex:1;min-height:0;align-items:center;gap:44px">
-<img src="{A}pt-BR-iphone-4-vale-do-fogo.jpg" style="height:980px;border-radius:36px;border:3px solid rgba(50,204,254,.45)">
-<div style="display:flex;flex-direction:column;gap:30px"><h2>NUNCA INJUSTO</h2><p>O gerador de peças é justo e um robô joga cada nível antes de você.</p></div></div>"""),
-    dict(html="""<h1>5 MUNDOS.<br><span class="b">NO SEU RITMO.</span></h1>
-""" + phones('pt-BR-iphone-3-mapa.jpg', 'pt-BR-iphone-5-oceano-de-cristal.jpg', 'pt-BR-iphone-6-reino-celestial.jpg', h=640) + """
-<div class="chips"><span class="chip">SEM ANÚNCIOS</span><span class="chip">SEM CRONÔMETRO</span><span class="chip">CAP. 1 GRÁTIS</span></div>"""),
+<img src="{A}en-bq-4.jpg" style="height:980px;""" + PH + """">
+<div style="display:flex;flex-direction:column;gap:30px"><h2>NEVER UNFAIR</h2><p>A fair piece generator, and a bot plays every level before you.</p></div></div>"""),
+    dict(html="""<h1>5 WORLDS.<br><span class="b">YOUR PACE.</span></h1>
+""" + phones('en-bq-3.jpg', 'en-bq-5.jpg', 'en-bq-6.jpg', h=640) + """
+<div class="chips"><span class="chip">NO ADS</span><span class="chip">NO TIMERS</span><span class="chip">CHAPTER 1 FREE</span></div>"""),
 ])
 
-# 9 ─ IA sem hype
-post('09-ia-sem-hype', '2026-12-18T20:00:00', 'Estúdio', 'IA', """
-IA sem hype 🤖
+# 9 ─ AI without the hype
+post('09-ai-no-hype', '2026-12-18T20:00:00', 'Studio', 'AI', """
+AI without the hype 🤖
 
-Sem jargão e sem promessa milagrosa. A gente descobre onde a IA economiza tempo e dinheiro no seu negócio, integra nos sistemas que você já usa e treina a sua equipe.
+No jargon, no miracle promises. We find where AI saves time and money in your business, plug it into the tools you already use and train your team.
 
-Cinco formas de começar:
-1. Diagnóstico de IA
-2. Assistentes e agentes
-3. Automação e integração
-4. IA dentro do seu produto
-5. Treinamento de equipes
+Five ways to start:
+1. AI assessment
+2. Assistants and agents
+3. Automation and integration
+4. AI inside your product
+5. Team training
 
-Quer saber onde a IA faz sentido para você? Fale com a gente em studio.noobperdido.com.
-
-🇪🇸 IA sin humo: diagnóstico, agentes, automatización y formación.
-🇺🇸 AI without the hype: assessment, agents, automation and training.
+Want to know where AI makes sense for you? Talk to us at studio.noobperdido.com.
 
 """ + HT_STUDIO, [
-    dict(html="""<h1 class="xl">IA<br><span class="b">SEM HYPE</span></h1>
-<p class="lead">A gente descobre onde a IA economiza tempo e dinheiro no seu negócio.</p>
+    dict(html="""<h1 class="xl">AI<br><span class="b">NO HYPE</span></h1>
+<p class="lead">We find where AI saves time and money in your business.</p>
 <img src="{A}glasses.svg" style="width:420px;align-self:flex-end;opacity:.9">"""),
-    dict(html="""<h1 class="sm">CINCO FORMAS<br><span class="b">DE COMEÇAR</span></h1>
+    dict(html="""<h1 class="sm">FIVE WAYS<br><span class="b">TO START</span></h1>
 <ul class="list">
-<li><div>Diagnóstico de IA<small>Onde vale a pena e onde não vale</small></div></li>
-<li><div>Assistentes e agentes<small>Atendimento e tarefas repetitivas</small></div></li>
-<li><div>Automação e integração<small>Nos sistemas que você já usa</small></div></li>
-<li><div>IA dentro do seu produto<small>Recursos novos para os seus clientes</small></div></li>
-<li><div>Treinamento de equipes<small>Para usar no dia a dia</small></div></li></ul>"""),
-    dict(html="""<h1>POR ONDE<br><span class="b">COMEÇAR?</span></h1>
-<p class="lead">Um diagnóstico curto mostra onde a IA faz diferença no seu negócio.</p>
-<p>Sem contrato longo e sem jargão.</p>
-<div class="cta">FALE COM A GENTE ▶<br>STUDIO.NOOBPERDIDO.COM</div>"""),
+<li><div>AI assessment<small>Where it pays off, and where it doesn't</small></div></li>
+<li><div>Assistants and agents<small>Support and repetitive tasks</small></div></li>
+<li><div>Automation and integration<small>With the tools you already use</small></div></li>
+<li><div>AI inside your product<small>New features for your customers</small></div></li>
+<li><div>Team training<small>For everyday work</small></div></li></ul>"""),
+    dict(html="""<h1>WHERE TO<br><span class="b">START?</span></h1>
+<p class="lead">A short assessment shows where AI makes a difference in your business.</p>
+<p>No long contracts, no jargon.</p>
+<div class="cta">TALK TO US ▶<br>STUDIO.NOOBPERDIDO.COM</div>"""),
 ])
 
-# 10 ─ Devlog #3 habilidades e arsenal
-SK = [('skill_emp.png', 'PULSO EMP'), ('skill_energy_shield.png', 'ESCUDO'), ('skill_nexus_surge.png', 'NEXUS SURGE'),
-      ('skill_precision_shot.png', 'TIRO PRECISO'), ('skill_emergency_recovery.png', 'RECUPERAÇÃO'), ('skill_energy_burst.png', 'EXPLOSÃO')]
-IT = [('item_plasma_pistol.png', 'PISTOLA DE PLASMA'), ('item_pulse_rifle.png', 'RIFLE DE PULSO'), ('item_heavy_blaster.png', 'BLASTER PESADO'),
-      ('item_nova_cannon.png', 'CANHÃO NOVA'), ('item_aegis_vest.png', 'COLETE AEGIS'), ('item_reactor_core.png', 'NÚCLEO DE REATOR')]
+# 10 ─ Devlog #3 skills and arsenal
+SK = [('skill_emp.png', 'EMP PULSE'), ('skill_energy_shield.png', 'SHIELD'), ('skill_nexus_surge.png', 'NEXUS SURGE'),
+      ('skill_precision_shot.png', 'PRECISION'), ('skill_emergency_recovery.png', 'RECOVERY'), ('skill_energy_burst.png', 'ENERGY BURST')]
+IT = [('item_plasma_pistol.png', 'PLASMA PISTOL'), ('item_pulse_rifle.png', 'PULSE RIFLE'), ('item_heavy_blaster.png', 'HEAVY BLASTER'),
+      ('item_nova_cannon.png', 'NOVA CANNON'), ('item_aegis_vest.png', 'AEGIS VEST'), ('item_reactor_core.png', 'REACTOR CORE')]
 
 
 def grid(items, cols=3):
@@ -323,125 +298,112 @@ def grid(items, cols=3):
 
 
 post('10-devlog-3', '2026-12-21T20:00:00', 'Devlog', 'DEVLOG #3', """
-Devlog #3 · Habilidades e arsenal ⚡🔫
+Devlog #3 · Skills and arsenal ⚡🔫
 
-O combate do Nexus é híbrido: duas armas equipadas, esquiva e habilidades, tudo na tela do iPhone. Cada ícone aqui virou pixel art 64×64 para o jogo.
+Combat in Nexus is hybrid: two equipped weapons, dodge and skills, all on your iPhone screen. Every icon here became 64×64 pixel art for the game.
 
-Arrasta para ver algumas habilidades e equipamentos do Benjamin.
+Swipe to see some of Benjamin's skills and gear.
 
-Pergunta do dia: qual você leva para a primeira missão? Vota nos stories 👀
-
-🇪🇸 Habilidades y armas de Nexus: ¿cuál te llevas a la primera misión?
-🇺🇸 Nexus skills and gear: which one do you take on your first mission?
+Question of the day: which one do you take on the first mission? Vote in our stories 👀
 
 """ + HT_DEV, [
-    dict(html="""<h1>HABILIDADES<br><span class="b">E ARSENAL</span></h1>
-<p>Duas armas equipadas, esquiva e habilidades.</p>""" + grid(SK)),
-    dict(html="""<h2>ARSENAL</h2><p>Cada item vira um ícone de 64×64 pixels no jogo.</p>""" + grid(IT)),
-    dict(html="""<h1>QUAL VOCÊ<br><span class="b">LEVA PARA</span><br>A MISSÃO?</h1>""" + grid(SK[:3]) + """<p class="lead">Vota nos stories 👀</p>"""),
+    dict(html="""<h1>SKILLS AND<br><span class="b">ARSENAL</span></h1>
+<p>Two equipped weapons, dodge and skills.</p>""" + grid(SK)),
+    dict(html="""<h2>ARSENAL</h2><p>Every item becomes a 64×64 pixel icon in the game.</p>""" + grid(IT)),
+    dict(html="""<h1>WHICH ONE<br><span class="b">DO YOU TAKE</span><br>ON THE MISSION?</h1>""" + grid(SK[:3]) + """<p class="lead">Vote in our stories 👀</p>"""),
 ])
 
-# 11 ─ Natal
-post('11-natal', '2026-12-23T20:00:00', 'Jogos', 'FELIZ NATAL', """
-Um presente que ensina 🎄🧮
+# 11 ─ Holidays
+post('11-holidays', '2026-12-23T20:00:00', 'Games', 'HAPPY HOLIDAYS', """
+A gift that teaches 🎄🧮
 
-Operação: Zero Absoluto transforma matemática em missão de espionagem para crianças de 7 a 12 anos.
+Operation Absolute Zero turns math into a spy mission for kids aged 7 to 12.
 
-Sem anúncios, sem coleta de dados e com painel para os pais acompanharem cada habilidade. Um jeito diferente de passar as férias jogando e aprendendo.
+No ads, no purchases, no data collection, and a parent dashboard to follow every skill. A different way to spend the holidays playing and learning.
 
-Feliz Natal de toda a equipe Noob Perdido 💙
-
-🇪🇸 Un regalo que enseña: matemáticas convertidas en misión. ¡Feliz Navidad!
-🇺🇸 A gift that teaches: math turned into a spy mission. Merry Christmas!
+Happy holidays from everyone at Noob Perdido 💙
 
 """ + HT_KIDS, [
-    dict(html="""<h1>UM PRESENTE<br><span class="b">QUE ENSINA</span></h1>
+    dict(html="""<h1>A GIFT<br><span class="b">THAT TEACHES</span></h1>
 <div class="row" style="flex:1;min-height:0;align-items:center;justify-content:center;gap:40px">
 <img src="{A}zero-icon.png" style="width:380px;border-radius:84px;border:3px solid rgba(50,204,254,.5)">
-<img src="{A}iphone-6.9-01-hack.jpg" style="height:720px;border-radius:32px;border:3px solid rgba(50,204,254,.45)"></div>
-<div class="chips"><span class="chip">7 A 12 ANOS</span><span class="chip">SEM ANÚNCIOS</span><span class="chip o">FELIZ NATAL</span></div>"""),
+<img src="{A}en-zero-1.jpg" style="height:720px;border-radius:32px;border:3px solid rgba(50,204,254,.45)"></div>
+<div class="chips"><span class="chip">AGES 7–12</span><span class="chip">NO ADS</span><span class="chip o">HAPPY HOLIDAYS</span></div>"""),
 ])
 
-# 12 ─ Retrospectiva
-post('12-retrospectiva', '2026-12-28T20:00:00', 'Estúdio', 'RETRÔ 2026', """
-2026 em pixels 👾
+# 12 ─ Year in review
+post('12-year-in-review', '2026-12-28T20:00:00', 'Studio', '2026 RECAP', """
+2026 in pixels 👾
 
-Foi o ano em que o Noob Perdido virou estúdio:
-• Block Quest e Operação: Zero Absoluto prontos
-• Reunio na App Store, atendendo várias igrejas
-• O sistema da Semilla de Vida rodando todos os dias
-• O motor do Nexus: Last Signal de pé, do combate ao save no iCloud
-• Site novo em português, espanhol e inglês
+The year Noob Perdido became a studio:
+• Block Quest: The Lost Jewel launched on the App Store
+• Operation Absolute Zero finished
+• Reunio live on the App Store, serving several churches
+• The Semilla de Vida system running every single day
+• The Nexus: Last Signal engine up and running, from combat to iCloud saves
+• A new studio website in three languages
 
-Obrigado a todo mundo que jogou, testou e confiou no nosso trabalho. Em 2027 tem mais 💙
+Thank you to everyone who played, tested and trusted our work. There's more coming in 2027 💙
 
-🇪🇸 2026 en píxeles: dos juegos listos, Reunio en el App Store y Nexus en marcha.
-🇺🇸 2026 in pixels: two games done, Reunio on the App Store and Nexus underway.
-
-#noobperdido #retrospectiva2026 #gamedev #indiedev #desenvolvimentodeapps
+#noobperdido #yearinreview #gamedev #indiedev #appdevelopment
 """, [
-    dict(html="""<h1 class="xl">2026<br><span class="b">EM PIXELS</span></h1>
-<p class="lead">O ano em que o Noob Perdido virou estúdio.</p>
+    dict(html="""<h1 class="xl">2026<br><span class="b">IN PIXELS</span></h1>
+<p class="lead">The year Noob Perdido became a studio.</p>
 <img src="{A}glasses.svg" style="width:460px;align-self:center;margin-top:40px">"""),
-    dict(html="""<h2>O QUE ROLOU</h2>
+    dict(html="""<h2>WHAT HAPPENED</h2>
 <ul class="list">
-<li>Block Quest e Operação: Zero Absoluto prontos</li>
-<li>Reunio na App Store</li>
-<li>Semilla de Vida em produção todos os dias</li>
-<li>O motor do Nexus de pé, do combate ao iCloud</li>
-<li>Site novo em três idiomas</li></ul>"""),
-    dict(html="""<h1>OBRIGADO POR<br><span class="b">JOGAR COM</span><br>A GENTE</h1>
-<p class="lead">Em 2027 tem mais.</p>
+<li>Block Quest launched on the App Store</li>
+<li>Operation Absolute Zero finished</li>
+<li>Reunio live on the App Store</li>
+<li>Semilla de Vida in production every day</li>
+<li>The Nexus engine up, from combat to iCloud</li>
+<li>A new website in three languages</li></ul>"""),
+    dict(html="""<h1>THANKS FOR<br><span class="b">PLAYING</span><br>WITH US</h1>
+<p class="lead">More is coming in 2027.</p>
 <div class="row" style="justify-content:space-between;margin-top:30px">
 <img src="{A}nexus-icon.jpg" style="width:280px;border-radius:60px"><img src="{A}zero-icon.png" style="width:280px;border-radius:60px">
-<img src="{A}pt-BR-iphone-1-inicio.jpg" style="width:280px;height:280px;object-fit:cover;object-position:50% 22%;border-radius:60px"></div>"""),
+<img src="{A}en-bq-1.jpg" style="width:280px;height:280px;object-fit:cover;object-position:50% 22%;border-radius:60px"></div>"""),
 ])
 
 # 13 ─ 2027
-post('13-sinal-2027', '2026-12-30T20:00:00', 'Devlog', 'NEXUS', """
-2027: o sinal fica mais forte 📡
+post('13-signal-2027', '2026-12-30T20:00:00', 'Devlog', 'NEXUS', """
+2027: the signal grows stronger 📡
 
-O próximo passo do Nexus: Last Signal é o Capítulo 1, The Fallen City. É nele que o Benjamin chega a Resplendor para descobrir quem mandou o sinal.
+Next up for Nexus: Last Signal is Chapter 1, The Fallen City. It's where Benjamin reaches New Aurora to find out who sent the signal.
 
-Os devlogs continuam toda segunda. Ativa as notificações e vem com a gente.
+Devlogs keep coming every Monday. Turn on notifications and come along.
 
-Feliz Ano Novo 🎆
-
-🇪🇸 2027: la señal se hace más fuerte. ¡Feliz Año Nuevo!
-🇺🇸 2027: the signal grows stronger. Happy New Year!
+Happy New Year 🎆
 
 """ + HT_DEV, [
     dict(html="""<div class="media" style="flex:0 0 760px"><img src="{A}nexus-icon.jpg" style="object-position:50% 45%"></div>
-<h1>2027:<br>O SINAL FICA<br><span class="b">MAIS FORTE</span></h1>"""),
+<h1>2027:<br>THE SIGNAL<br><span class="b">GROWS STRONGER</span></h1>"""),
 ])
 
-# 14 ─ Case Semilla (janeiro)
-post('14-case-semilla', '2027-01-08T20:00:00', 'Estúdio', 'CASE', """
-Case: Iglesia Semilla de Vida 🌱
+# 14 ─ Case Semilla (January)
+post('14-case-semilla', '2027-01-08T20:00:00', 'Studio', 'CASE STUDY', """
+Case study: Iglesia Semilla de Vida 🌱
 
-Para a Semilla de Vida, na Espanha, fizemos o site da igreja e o Sistema de Gestión Eclesiástica:
-• Membros e permissões por cargo
-• Tesouraria com relatórios em PDF
-• App nativo para iPhone
+For Semilla de Vida, a church in Spain, we built the website and their church management system:
+• Members and role-based permissions
+• Treasury with PDF reports
+• A native iPhone app
 
-Está em produção todos os dias, e foi dele que nasceu o Reunio.
+It runs in production every day, and it's where Reunio was born.
 
-Sua organização ainda vive de planilha? A gente resolve. studio.noobperdido.com
-
-🇪🇸 Web, sistema de gestión y app para iPhone de la Iglesia Semilla de Vida.
-🇺🇸 Website, management system and iPhone app for Iglesia Semilla de Vida.
+Is your organization still running on spreadsheets? We can fix that. studio.noobperdido.com
 
 """ + HT_STUDIO, [
-    dict(html="""<h1>CASE:<br><span class="b">SEMILLA DE VIDA</span></h1>
+    dict(html="""<h1>CASE STUDY:<br><span class="b">SEMILLA DE VIDA</span></h1>
 <div class="media" style="background:#3e4c59;display:flex;align-items:center;justify-content:center"><img src="{A}semilla-logo.svg" style="width:80%;height:auto;object-fit:contain"></div>
-<p class="lead">Site, sistema e app para uma igreja na Espanha.</p>"""),
-    dict(html="""<h2>O QUE FIZEMOS</h2>
+<p class="lead">Website, system and app for a church in Spain.</p>"""),
+    dict(html="""<h2>WHAT WE BUILT</h2>
 <div class="media" style="flex:0 0 480px"><img src="{A}semilla-sge.svg"></div>
-<ul class="list"><li>Membros e permissões por cargo</li><li>Tesouraria com relatórios em PDF</li><li>App nativo para iPhone</li></ul>"""),
-    dict(html="""<h1>EM PRODUÇÃO<br><span class="b">TODO DIA</span></h1>
-<p class="lead">E foi daqui que nasceu o Reunio.</p>
+<ul class="list"><li>Members and role-based permissions</li><li>Treasury with PDF reports</li><li>A native iPhone app</li></ul>"""),
+    dict(html="""<h1>IN PRODUCTION<br><span class="b">EVERY DAY</span></h1>
+<p class="lead">And it's where Reunio was born.</p>
 <div class="chips"><span class="chip o">REACT</span><span class="chip o">SUPABASE</span><span class="chip o">SWIFTUI</span><span class="chip o">DOCKER</span></div>
-<div class="cta">AINDA NA PLANILHA? ▶<br>FALE COM A GENTE</div>"""),
+<div class="cta">STILL ON SPREADSHEETS? ▶<br>TALK TO US</div>"""),
 ])
 
 json.dump(P, open('/home/claude/social/posts.json', 'w'), ensure_ascii=False, indent=1)
