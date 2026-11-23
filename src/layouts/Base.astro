@@ -2,10 +2,16 @@
 import '../styles/global.css';
 import { htmlLang, langPath, LANGS, type Lang } from '../data/content';
 
-interface Props { title: string; description: string; lang?: Lang; noindex?: boolean }
+interface Props {
+  title: string; description: string; lang?: Lang; noindex?: boolean;
+  /** override for pages outside the home (default: the home page of `lang`) */
+  canonical?: string; alternates?: { hreflang: string; href: string }[]; xDefault?: string;
+}
 const { title, description, lang = 'pt', noindex = false } = Astro.props;
 const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
-const canonical = site + langPath[lang];
+const canonical = Astro.props.canonical ?? site + langPath[lang];
+const alternates = Astro.props.alternates ?? LANGS.map((l) => ({ hreflang: htmlLang[l], href: site + langPath[l] }));
+const xDefault = Astro.props.xDefault ?? site + '/en/';
 const ogLocale = { pt: 'pt_BR', es: 'es_ES', en: 'en_US' }[lang];
 ---
 <!doctype html>
@@ -21,8 +27,8 @@ const ogLocale = { pt: 'pt_BR', es: 'es_ES', en: 'en_US' }[lang];
     {noindex ? <meta name="robots" content="noindex, nofollow" /> : (
       <>
         <link rel="canonical" href={canonical} />
-        {LANGS.map((l) => <link rel="alternate" hreflang={htmlLang[l]} href={site + langPath[l]} />)}
-        <link rel="alternate" hreflang="x-default" href={site + '/en/'} />
+        {alternates.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
+        <link rel="alternate" hreflang="x-default" href={xDefault} />
       </>
     )}
     <meta property="og:type" content="website" />

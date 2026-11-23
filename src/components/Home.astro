@@ -4,6 +4,7 @@ import Logo from './Logo.astro';
 import Icon from './Icon.astro';
 import { t, langPath, langLabel, LANGS, type Lang, type Project } from '../data/content';
 import { getSettings, getProjects } from '../lib/store';
+import { projectPolicyUrl } from '../lib/policies';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -16,6 +17,10 @@ const visible = getProjects().filter((x) => x.visible);
 const clients = visible.filter((x) => x.kind === 'client');
 const own = visible.filter((x) => x.kind === 'own');
 const examples = t.hero.searchExamples[lang];
+// a project's own site, unless that link is just its privacy policy
+const paras = (v: string) => v.split(/\n{2,}/).map((x) => x.trim()).filter(Boolean);
+const galleryOf = (x: Project) => [...new Set(x.gallery?.length ? x.gallery : [x.image])].filter(Boolean);
+const siteUrl = (x: Project) => (x.url && x.url !== projectPolicyUrl(x, lang) ? x.url : undefined);
 const wa = s.whatsapp.replace(/[^\d]/g, '');
 const ig = s.instagram.replace(/^@/, '');
 const themeLabels = {
@@ -149,14 +154,17 @@ const themeLabels = {
             </div>
             <div class="clients">
               {clients.map((c: Project, i: number) => (
-                <article class={`client reveal ${i % 2 ? 'flip' : ''}`}>
+                <article class={`client reveal has-dlg ${i % 2 ? 'flip' : ''}`}>
                   <div class={`client-img ${c.imageFit === 'contain' ? 'is-logo' : ''}`} style={c.imageBg ? `background:${c.imageBg}` : undefined}>{c.image && <img src={c.image} alt={c.imageFit === 'contain' ? c.name : ''} loading="lazy" decoding="async" width="1200" height="630" />}</div>
                   <div class="client-body">
                     <p class="pixel tag">{p(c.tag)}</p>
                     <h3>{c.name}</h3>
                     <p>{p(c.summary)}</p>
                     {c.stack.length > 0 && <ul class="chips">{c.stack.map((x) => <li>{x}</li>)}</ul>}
-                    {c.url && <a class="btn ghost" href={c.url} target="_blank" rel="noopener">{p(c.urlLabel) || viewLabel[lang]} <span aria-hidden="true">↗</span></a>}
+                    <div class="client-actions">
+                      <button type="button" class="btn ghost card-open" data-dlg={`pd-${c.id}`} aria-haspopup="dialog">{p(t.work.details)}</button>
+                      {siteUrl(c) && <a class="link-arrow" href={c.url} target="_blank" rel="noopener">{p(c.urlLabel) || viewLabel[lang]} <span aria-hidden="true">↗</span></a>}
+                    </div>
                   </div>
                 </article>
               ))}
@@ -172,7 +180,7 @@ const themeLabels = {
             </div>
             <div class="games">
               {own.map((g: Project, i: number) => (
-                <article class="game reveal" style={`--d:${i * 80}ms`}>
+                <article class="game reveal has-dlg" style={`--d:${i * 80}ms`}>
                   <div class={`game-img ${g.imageFit === 'contain' ? 'is-logo' : ''}`} style={g.imageBg ? `background:${g.imageBg}` : undefined}>
                     {g.image && <img src={g.image} alt={g.imageFit === 'contain' ? g.name : ''} loading="lazy" decoding="async" />}
                     {p(g.status) && <span class="pixel badge">{p(g.status)}</span>}
@@ -183,7 +191,7 @@ const themeLabels = {
                     <p>{p(g.summary)}</p>
                     <div class="game-foot">
                       {g.stack.length > 0 && <ul class="chips">{g.stack.map((x) => <li>{x}</li>)}</ul>}
-                      {g.url && <a class="link-arrow" href={g.url} target="_blank" rel="noopener">{p(g.urlLabel) || viewLabel[lang]} <span aria-hidden="true">↗</span></a>}
+                      <button type="button" class="link-arrow card-open" data-dlg={`pd-${g.id}`} aria-haspopup="dialog">{p(t.work.details)} <span aria-hidden="true">→</span></button>
                     </div>
                   </div>
                 </article>
@@ -193,6 +201,45 @@ const themeLabels = {
         )}
       </div>
     </section>
+
+    {visible.map((x: Project) => ({ x, imgs: galleryOf(x), pol: projectPolicyUrl(x, lang), site: siteUrl(x) })).map(({ x, imgs, pol, site }) => (
+        <dialog class="pd" id={`pd-${x.id}`} aria-labelledby={`pd-${x.id}-t`}>
+          <div class="pd-in">
+            <button type="button" class="pd-x" data-close aria-label={p(t.work.close)}><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"/></svg></button>
+            {imgs.length > 1 && (
+              <div class="pd-nav">
+                <button type="button" class="pd-arrow" data-dir="-1" aria-label={{ pt: 'Imagem anterior', es: 'Imagen anterior', en: 'Previous image' }[lang]}><span aria-hidden="true">‹</span></button>
+                <button type="button" class="pd-arrow" data-dir="1" aria-label={{ pt: 'Próxima imagem', es: 'Siguiente imagen', en: 'Next image' }[lang]}><span aria-hidden="true">›</span></button>
+              </div>
+            )}
+            {imgs.length > 0 && (
+              <div class={`pd-gallery ${imgs.length === 1 ? 'single' : ''}`} tabindex="0" aria-label={x.name}>
+                {imgs.map((src, k) => (
+                  <figure class={x.imageFit === 'contain' && src === x.image ? 'is-logo' : ''} style={x.imageFit === 'contain' && src === x.image && x.imageBg ? `background:${x.imageBg}` : undefined}>
+                    <img data-src={src} alt={`${x.name} · ${p(t.work.photo)} ${k + 1}`} decoding="async" />
+                  </figure>
+                ))}
+              </div>
+            )}
+            <div class="pd-body">
+              <p class="pixel tag">{p(x.tag)}{p(x.status) && <span class="pd-status"> · {p(x.status)}</span>}</p>
+              <h3 id={`pd-${x.id}-t`}>{x.name}</h3>
+              {x.client && <p class="pd-client">{x.client}</p>}
+              <p>{p(x.summary)}</p>
+              {paras(p(x.details)).map((para) => <p>{para}</p>)}
+              {x.stack.length > 0 && <ul class="chips">{x.stack.map((st) => <li>{st}</li>)}</ul>}
+              {(site || x.appStore || x.googlePlay || pol) && (
+                <div class="pd-links">
+                  {x.appStore && <a class="btn" href={x.appStore} target="_blank" rel="noopener">{p(t.work.appStore)} <span aria-hidden="true">↗</span></a>}
+                  {x.googlePlay && <a class="btn" href={x.googlePlay} target="_blank" rel="noopener">{p(t.work.googlePlay)} <span aria-hidden="true">↗</span></a>}
+                  {site && <a class={x.appStore || x.googlePlay ? 'btn ghost' : 'btn'} href={site} target="_blank" rel="noopener">{p(x.urlLabel) || p(t.work.site)} <span aria-hidden="true">↗</span></a>}
+                  {pol && <a class="link-arrow pd-policy" href={pol} target={pol.startsWith('/') ? undefined : '_blank'} rel={pol.startsWith('/') ? undefined : 'noopener'}>{p(t.work.policy)} <span aria-hidden="true">→</span></a>}
+                </div>
+              )}
+            </div>
+          </div>
+        </dialog>
+    ))}
 
     <section class="section process" id="processo">
       <div class="wrap">
@@ -292,6 +339,40 @@ const themeLabels = {
       try { next === 'auto' ? localStorage.removeItem('np_theme') : localStorage.setItem('np_theme', next); } catch {}
       setLabel();
     });
+
+    // project windows (native <dialog>: Esc closes it and focus returns to the card)
+    const openDlg = (d: HTMLDialogElement) => {
+      d.querySelectorAll<HTMLImageElement>('img[data-src]').forEach((im) => { im.src = im.dataset.src!; im.removeAttribute('data-src'); });
+      d.showModal();
+      document.documentElement.classList.add('dlg-open');
+      history.replaceState(null, '', '#' + d.id.slice(3));
+    };
+    document.querySelectorAll<HTMLButtonElement>('.card-open').forEach((b) => b.addEventListener('click', () => {
+      const d = document.getElementById(b.dataset.dlg!) as HTMLDialogElement | null;
+      if (d) openDlg(d);
+    }));
+    document.querySelectorAll<HTMLDialogElement>('dialog.pd').forEach((d) => {
+      d.addEventListener('click', (e) => { if (e.target === d || (e.target as Element).closest('[data-close]')) d.close(); });
+      d.addEventListener('close', () => {
+        document.documentElement.classList.remove('dlg-open');
+        if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+      });
+    });
+    document.querySelectorAll<HTMLButtonElement>('.pd-arrow').forEach((b) => b.addEventListener('click', () => {
+      const g = b.closest('.pd-in')?.querySelector<HTMLElement>('.pd-gallery');
+      const f = g?.querySelector('figure');
+      if (g && f) g.scrollBy({ left: Number(b.dataset.dir) * (f.clientWidth + 10), behavior: 'smooth' });
+    }));
+    // whole card opens the window too (except its own links)
+    document.querySelectorAll<HTMLElement>('.has-dlg').forEach((card) => card.addEventListener('click', (e) => {
+      if ((e.target as Element).closest('a, button')) return;
+      card.querySelector<HTMLButtonElement>('.card-open')?.click();
+    }));
+    // deep link: /#nexus opens that project
+    if (location.hash.length > 1) {
+      const d = document.getElementById('pd-' + decodeURIComponent(location.hash.slice(1)));
+      if (d instanceof HTMLDialogElement) openDlg(d);
+    }
 
     // remember a manual language choice (the server uses it on the next visit to /)
     document.querySelectorAll<HTMLAnchorElement>('.langs a[hreflang]').forEach((a) => a.addEventListener('click', () => {
@@ -628,4 +709,39 @@ const themeLabels = {
   .foot-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 32px; padding-top: 24px; border-top: 1px solid var(--line); }
   .foot-row .pixel { font-size: 9px; color: var(--muted); }
   .foot-row .muted { color: var(--faint); font-size: 14px; margin-right: auto; }
+
+  /* project window */
+  .has-dlg { cursor: pointer; }
+  .client-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; }
+  button.link-arrow { background: none; border: 0; padding: 0; cursor: pointer; font-family: inherit; }
+  :global(html.dlg-open) { overflow: hidden; }
+  .pd { width: min(920px, calc(100% - 32px)); max-height: calc(100dvh - 48px); padding: 0; border: 1px solid var(--line-2); border-radius: var(--radius-lg); background: var(--bg-1); color: var(--text); overflow: hidden; box-shadow: 0 30px 80px rgb(0 0 0 / .5); }
+  .pd[open] { display: flex; animation: pd-in .35s var(--ease); }
+  .pd::backdrop { background: rgb(0 0 0 / .72); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); animation: pd-fade .3s ease; }
+  @keyframes pd-in { from { opacity: 0; transform: translateY(24px) scale(.98); } }
+  @keyframes pd-fade { from { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .pd[open], .pd::backdrop { animation: none; } }
+  .pd-in { position: relative; overflow-y: auto; overscroll-behavior: contain; width: 100%; }
+  .pd-x { position: sticky; top: 12px; float: right; margin: 12px 12px -52px 0; z-index: 2; width: 40px; height: 40px; display: grid; place-items: center; border-radius: 10px; border: 1px solid var(--line-2); background: var(--header-bg); color: var(--text); cursor: pointer; backdrop-filter: blur(8px); }
+  .pd-x:hover { color: var(--accent); border-color: var(--accent); }
+  .pd-nav { position: absolute; left: 0; right: 0; top: clamp(112px, calc(21vh + 12px), 202px); z-index: 2; display: flex; justify-content: space-between; padding: 0 20px; pointer-events: none; }
+  .pd-arrow { pointer-events: auto; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line-2); background: var(--header-bg); color: var(--text); font: 600 24px/1 var(--font-display); cursor: pointer; backdrop-filter: blur(8px); display: grid; place-items: center; padding-bottom: 3px; }
+  .pd-arrow:hover { color: var(--accent); border-color: var(--accent); }
+  @media (hover: none) { .pd-nav { display: none; } }
+  .pd-gallery { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 12px; background: var(--bg-2); scrollbar-width: thin; }
+  .pd-gallery figure { margin: 0; flex: 0 0 auto; height: clamp(200px, 42vh, 380px); aspect-ratio: 4 / 3; scroll-snap-align: start; border-radius: 10px; overflow: hidden; background: var(--bg); }
+  .pd-gallery.single figure { width: 100%; aspect-ratio: auto; }
+  .pd-gallery figure.is-logo { display: grid; place-items: center; aspect-ratio: 16 / 9; }
+  .pd-gallery img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pd-gallery figure.is-logo img { width: 60%; height: 60%; object-fit: contain; }
+  .pd-body { padding: clamp(20px, 4vw, 36px); display: grid; gap: 14px; color: var(--muted); }
+  .pd-body h3 { color: var(--text); font-size: clamp(26px, 3.4vw, 36px); }
+  .pd-body .tag { color: var(--accent); }
+  .pd-client { font-size: 15px; color: var(--faint); margin-top: -6px; }
+  .pd-links { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-top: 8px; padding-top: 18px; border-top: 1px solid var(--line); }
+  @media (max-width: 560px) {
+    .pd { width: 100%; max-width: 100%; max-height: 100dvh; height: 100dvh; border-radius: 0; border: 0; }
+    .pd-gallery figure { height: 220px; }
+    .pd-links .btn { width: 100%; }
+  }
 </style>

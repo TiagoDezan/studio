@@ -1,0 +1,46 @@
+---
+import PolicyShell from '../../components/PolicyShell.astro';
+import { getPolicy, policyDoc, policyLangs } from '../../lib/policies';
+import { pickLang } from '../../lib/lang';
+
+const policy = getPolicy(Astro.params.app ?? '');
+if (!policy) return new Response('Not found', { status: 404, headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
+
+const langs = policyLangs(policy);
+const lang = pickLang(Astro.url, Astro.cookies, Astro.request.headers, langs);
+const doc = policyDoc(policy, lang);
+const path = `/policies/${policy.slug}`;
+const label = { pt: 'Política de privacidade', es: 'Política de privacidad', en: 'Privacy policy' }[lang];
+const contactLabel = { pt: 'Dúvidas sobre privacidade?', es: '¿Dudas sobre privacidad?', en: 'Privacy questions?' }[lang];
+const desc = { pt: `Como o ${policy.app} trata os seus dados.`, es: `Cómo ${policy.app} trata tus datos.`, en: `How ${policy.app} handles your data.` }[lang];
+if (!Astro.url.searchParams.has('lang')) Astro.response.headers.set('Vary', 'Accept-Language, Cookie');
+---
+<PolicyShell lang={lang} title={`${doc.title} | Noob Perdido Studio`} description={desc} path={path} langs={langs}>
+  <article class="wrap policy">
+    <header class="policy-head">
+      <p class="pixel eyebrow">{label}</p>
+      <h1>{doc.app}</h1>
+    </header>
+    <div class="prose" set:html={doc.html} />
+    <aside class="contact">
+      <p>{contactLabel}</p>
+      <a class="btn" href="mailto:studio@noobperdido.com">studio@noobperdido.com</a>
+    </aside>
+  </article>
+</PolicyShell>
+
+<style>
+  .policy { max-width: 760px; padding-block: clamp(48px, 8vw, 96px); }
+  .policy-head { display: grid; gap: 18px; margin-bottom: 32px; }
+  h1 { font-size: clamp(36px, 6vw, 60px); }
+  .prose { color: var(--muted); }
+  .prose :global(p) { margin: 0 0 1em; }
+  .prose :global(> p:first-child) { font-size: 15px; color: var(--faint); }
+  .prose :global(em) { font-style: normal; }
+  .prose :global(h2) { font-size: clamp(22px, 3vw, 28px); line-height: 1.2; color: var(--text); margin: 2em 0 .6em; padding-top: 1.2em; border-top: 1px solid var(--line); }
+  .prose :global(a) { color: var(--accent); }
+  .prose :global(ul) { padding-left: 1.2em; margin: 0 0 1em; }
+  .contact { margin-top: 56px; padding: 28px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--card-bg); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+  .contact p { font: 600 20px/1.2 var(--font-display); }
+  @media (max-width: 560px) { .contact .btn { width: 100%; font-size: 15px; } }
+</style>
