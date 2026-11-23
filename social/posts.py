@@ -20,7 +20,7 @@ def phones(*srcs, h=820):
 PH = 'border-radius:36px;border:3px solid rgba(50,204,254,.45)'
 
 # 1 ─ Hello
-post('01-hello', '2026-12-02T20:00:00', 'Studio', 'HELLO, WORLD', """
+post('01-hello-v2', '2026-12-02T20:00:00', 'Studio', 'HELLO, WORLD', """
 Hi, we're Noob Perdido Studio 👓
 
 We build apps, websites, custom systems and games. And now we help businesses use AI without the hype.
@@ -30,6 +30,8 @@ Swipe to see:
 • how we work, in four levels
 • what you'll find here every week
 
+We work in English, Spanish and Portuguese, with clients in Europe and the Americas. 🇬🇧 🇪🇸 🇧🇷
+
 Lost with your idea? We'll find the way. Tell us about it at studio.noobperdido.com (link in bio).
 
 #noobperdido #gamedev #indiedev #appdevelopment #startup #iosdev
@@ -37,7 +39,7 @@ Lost with your idea? We'll find the way. Tell us about it at studio.noobperdido.
     dict(html="""<div style="display:flex;flex-direction:column;gap:56px;align-items:flex-start">
 <img src="{A}glasses.svg" style="width:520px;filter:drop-shadow(0 0 40px rgba(50,204,254,.5))">
 <h1 class="xl">HI, WE'RE<br><span class="b">NOOB PERDIDO</span><br>STUDIO</h1>
-<p class="lead">Lost with your idea?<br>We'll find the way.</p></div>"""),
+<p class="lead">Lost with your idea?<br>We'll find the way.</p><p class="small">English · Español · Português</p></div>"""),
     dict(html="""<h1>WHAT<br><span class="b">WE DO</span></h1>
 <ul class="list">
 <li><div>iPhone and Android apps<small>Native, fast and App Store ready</small></div></li>
@@ -56,6 +58,7 @@ Lost with your idea? We'll find the way. Tell us about it at studio.noobperdido.
 <li><div>Monday: Nexus devlog<small>Our action RPG in development</small></div></li>
 <li><div>Wednesday: Our games<small>Block Quest and Operation Absolute Zero</small></div></li>
 <li><div>Friday: Studio<small>Case studies, behind the scenes and AI</small></div></li></ul>
+<div class="chips"><span class="chip o">WE SPEAK</span><span class="chip">ENGLISH</span><span class="chip">ESPAÑOL</span><span class="chip">PORTUGUÊS</span></div>
 <div class="cta">TELL US YOUR IDEA ▶<br>STUDIO.NOOBPERDIDO.COM</div>"""),
 ])
 
@@ -175,7 +178,7 @@ For kids aged 7 to 12, on iPhone and iPad. Tag a parent who needs to see this �
 post('06-case-reunio', '2026-12-11T20:00:00', 'Studio', 'CASE STUDY', """
 Case study: Reunio ⛪📱
 
-Reunio was born inside a real church, from the system we built for Iglesia Semilla de Vida. Today it's a SaaS serving several churches on the web, iPhone and Android.
+@app.reunio was born inside a real church, from the system we built for @iglesiapresbiteriana.alhaurin (Iglesia Semilla de Vida). Today it's a SaaS serving several churches on the web, iPhone and Android.
 
 What we delivered:
 • Members, full treasury, rotas and announcements
@@ -226,28 +229,30 @@ Which part of the process should we show in the next devlog?
 <div style="width:960px;height:160px;background:url({A}benjamin_east_run.png) 0 0/960px 160px no-repeat;image-rendering:pixelated"></div></div>"""),
 ])
 
-# 8 ─ Block Quest robot
-post('08-bq-robot', '2026-12-16T20:00:00', 'Games', 'BLOCK QUEST', """
-A robot plays every Block Quest level before you do 🤖🧩
+# 8 ─ Block Quest worlds
+post('08-bq-worlds', '2026-12-16T20:00:00', 'Games', 'BLOCK QUEST', """
+Five worlds. One lost jewel. 💎🧩
 
-Behind the five worlds there are two secrets:
-• A fair piece generator: no level is impossible because of bad luck
-• A bot that tests every level and makes sure it can be beaten
+In Block Quest: The Lost Jewel you fit pieces on an 8×8 board, clear lines and beat each level's mission, from the Emerald Forest to the Celestial Kingdom.
 
-The result is a puzzle that's challenging but never unfair. No ads and no timers, at your own pace.
+• Fair by design: pieces are dealt so no level is impossible because of bad luck
+• No ads and no timers, play at your own pace
+• Chapter 1 is free
 
-Block Quest: The Lost Jewel. Chapter 1 is free on iPhone and iPad. Link in bio.
+Which world would you start with? 👇
+
+Out now on iPhone and iPad. Link in bio.
 
 """ + HT_GAMES, [
     dict(html="""<div class="row" style="flex:1;min-height:0;align-items:center;gap:44px">
 <img src="{A}en-bq-1.jpg" style="height:980px;""" + PH + """">
-<h1 class="sm">A <span class="b">ROBOT</span> TESTS EVERY LEVEL</h1></div>"""),
+<h1 class="sm">FIVE <span class="b">WORLDS.</span> ONE LOST JEWEL.</h1></div>"""),
     dict(html="""<div class="row" style="flex:1;min-height:0;align-items:center;gap:44px">
 <div style="display:flex;flex-direction:column;gap:30px"><h2>8×8 BOARD</h2><p>Fit pieces, clear lines and beat each level's mission.</p></div>
 <img src="{A}en-bq-2.jpg" style="height:980px;""" + PH + """"></div>"""),
     dict(html="""<div class="row" style="flex:1;min-height:0;align-items:center;gap:44px">
 <img src="{A}en-bq-4.jpg" style="height:980px;""" + PH + """">
-<div style="display:flex;flex-direction:column;gap:30px"><h2>NEVER UNFAIR</h2><p>A fair piece generator, and a bot plays every level before you.</p></div></div>"""),
+<div style="display:flex;flex-direction:column;gap:30px"><h2>FAIR BY DESIGN</h2><p>Pieces are dealt so no level is impossible because of bad luck.</p></div></div>"""),
     dict(html="""<h1>5 WORLDS.<br><span class="b">YOUR PACE.</span></h1>
 """ + phones('en-bq-3.jpg', 'en-bq-5.jpg', 'en-bq-6.jpg', h=640) + """
 <div class="chips"><span class="chip">NO ADS</span><span class="chip">NO TIMERS</span><span class="chip">CHAPTER 1 FREE</span></div>"""),
@@ -384,12 +389,12 @@ Happy New Year 🎆
 post('14-case-semilla', '2027-01-08T20:00:00', 'Studio', 'CASE STUDY', """
 Case study: Iglesia Semilla de Vida 🌱
 
-For Semilla de Vida, a church in Spain, we built the website and their church management system:
+For @iglesiapresbiteriana.alhaurin, a church in Spain, we built the website and their church management system:
 • Members and role-based permissions
 • Treasury with PDF reports
 • A native iPhone app
 
-It runs in production every day, and it's where Reunio was born.
+It runs in production every day, and it's where @app.reunio was born.
 
 Is your organization still running on spreadsheets? We can fix that. studio.noobperdido.com
 
