@@ -50,6 +50,7 @@ export const projects: Project[] = [
     imageFit: 'contain',
     imageBg: '#3e4c59',
     url: 'https://semilladevida.org.es',
+    appStore: '#',
     urlLabel: { pt: 'Ver o site', es: 'Ver la web', en: 'Visit site' },
   },
   {
@@ -66,6 +67,8 @@ export const projects: Project[] = [
     stack: ['React', 'TypeScript', 'Supabase', 'SwiftUI', 'PWA'],
     image: '/projects/reunio-1.webp',
     url: 'https://reunio.app',
+    appStore: '#',
+    googlePlay: '#',
     urlLabel: { pt: 'Conhecer o Reunio', es: 'Conocer Reunio', en: 'Discover Reunio' },
   },
   {
@@ -98,6 +101,7 @@ export const projects: Project[] = [
     image: '/projects/zero-absoluto-1.webp',
     gallery: ['/projects/zero-absoluto-1.webp', '/projects/zero-absoluto-2.webp'],
     policy: 'https://tiagodezan.github.io/games_policy/zero-absoluto/',
+    appStore: '#',
     url: 'https://tiagodezan.github.io/games_policy/zero-absoluto/',
     urlLabel: { pt: 'Mais informações', es: 'Más información', en: 'More info' },
   },
@@ -115,6 +119,7 @@ export const projects: Project[] = [
     image: '/projects/block-quest-1.webp',
     gallery: ['/projects/block-quest-1.webp', '/projects/block-quest-2.webp'],
     policy: 'https://tiagodezan.github.io/games_policy/block-quest/',
+    appStore: '#',
     url: 'https://tiagodezan.github.io/games_policy/block-quest/',
     urlLabel: { pt: 'Mais informações', es: 'Más información', en: 'More info' },
   },

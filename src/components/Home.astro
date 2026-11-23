@@ -230,8 +230,8 @@ const themeLabels = {
               {x.stack.length > 0 && <ul class="chips">{x.stack.map((st) => <li>{st}</li>)}</ul>}
               {(site || x.appStore || x.googlePlay || pol) && (
                 <div class="pd-links">
-                  {x.appStore && <a class="btn" href={x.appStore} target="_blank" rel="noopener">{p(t.work.appStore)} <span aria-hidden="true">↗</span></a>}
-                  {x.googlePlay && <a class="btn" href={x.googlePlay} target="_blank" rel="noopener">{p(t.work.googlePlay)} <span aria-hidden="true">↗</span></a>}
+                  {x.appStore && <a class="btn" href={x.appStore} target={x.appStore === '#' ? undefined : '_blank'} rel="noopener">{p(t.work.appStore)} <span aria-hidden="true">↗</span></a>}
+                  {x.googlePlay && <a class="btn" href={x.googlePlay} target={x.googlePlay === '#' ? undefined : '_blank'} rel="noopener">{p(t.work.googlePlay)} <span aria-hidden="true">↗</span></a>}
                   {site && <a class={x.appStore || x.googlePlay ? 'btn ghost' : 'btn'} href={site} target="_blank" rel="noopener">{p(x.urlLabel) || p(t.work.site)} <span aria-hidden="true">↗</span></a>}
                   {pol && <a class="link-arrow pd-policy" href={pol} target={pol.startsWith('/') ? undefined : '_blank'} rel={pol.startsWith('/') ? undefined : 'noopener'}>{p(t.work.policy)} <span aria-hidden="true">→</span></a>}
                 </div>

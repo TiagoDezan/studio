@@ -77,7 +77,7 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
         await fs.writeFile(path.join(UPLOAD_DIR, fname), Buffer.from(await gf.arrayBuffer()));
         gallery.push('/media/' + fname);
       }
-      const link = (k: string) => { const v = str(fd, k, 400); return /^https:\/\//.test(v) ? v : undefined; };
+      const link = (k: string) => { const v = str(fd, k, 400); return /^https:\/\//.test(v) || v === '#' ? v : undefined; };
       const policy = str(fd, 'policy', 300);
       const url = str(fd, 'url', 300);
       const bg = str(fd, 'imageBg', 20);
