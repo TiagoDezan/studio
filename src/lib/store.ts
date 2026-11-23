@@ -94,6 +94,17 @@ if (!db.migrations.includes('project-window-v1')) {
   queueMicrotask(() => save());
 }
 
+// store buttons were added as '#' placeholders (to be replaced in /painel)
+if (!db.migrations.includes('store-placeholders-v1')) {
+  for (const p of db.projects ?? []) {
+    const d = defaultProjects.find((x) => x.id === p.id);
+    if (!d) continue;
+    for (const k of ['appStore', 'googlePlay'] as const) if (!p[k] && d[k]) p[k] = d[k];
+  }
+  db.migrations.push('store-placeholders-v1');
+  queueMicrotask(() => save());
+}
+
 export const UPLOAD_DIR = path.join(DATA_DIR, 'uploads');
 
 let timer: NodeJS.Timeout | null = null;

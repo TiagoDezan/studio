@@ -246,8 +246,8 @@ const errKeys = ['missing', 'badimg'];
               <h2>Janela de detalhes</h2>
               <p class="muted small">Aparece quando a pessoa clica no projeto no site.</p>
               <div class="grid2">
-                <label><span>Link da App Store (opcional)</span><input type="url" name="appStore" placeholder="https://apps.apple.com/…" value={ep?.appStore ?? ''} /></label>
-                <label><span>Link do Google Play (opcional)</span><input type="url" name="googlePlay" placeholder="https://play.google.com/…" value={ep?.googlePlay ?? ''} /></label>
+                <label><span>Link da App Store (opcional)</span><input name="appStore" placeholder="https://apps.apple.com/…" value={ep?.appStore ?? ''} /></label>
+                <label><span>Link do Google Play (opcional)</span><input name="googlePlay" placeholder="https://play.google.com/…" value={ep?.googlePlay ?? ''} /></label>
                 <label><span>Política de privacidade</span>
                   <input name="policy" list="policy-slugs" placeholder="Automática (pelo nome)" value={ep?.policy ?? ''} />
                   <datalist id="policy-slugs">{policySlugs.map((x) => <option value={x} />)}</datalist>
