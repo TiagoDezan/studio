@@ -22,6 +22,15 @@ export interface Project {
   url?: string;
   urlLabel?: L;
   status?: L;
+  /** longer text shown in the project window (falls back to nothing; the summary is always shown) */
+  details?: L;
+  /** extra screenshots/photos shown in the project window */
+  gallery?: string[];
+  appStore?: string;
+  googlePlay?: string;
+  /** privacy policy: a slug of src/data/policies (served at /policies/<slug>) or a full URL.
+   *  When empty, /policies/<slug-of-the-name> is used if it exists. */
+  policy?: string;
 }
 
 export const projects: Project[] = [
@@ -71,6 +80,8 @@ export const projects: Project[] = [
     },
     stack: ['Swift', 'SpriteKit', 'CloudKit'],
     image: '/projects/nexus-last-signal.svg',
+    gallery: ['/projects/nexus-1.webp', '/projects/nexus-2.webp', '/projects/nexus-4.webp', '/projects/nexus-5.webp', '/projects/nexus-3.webp', '/projects/nexus-6.webp'],
+    policy: 'nexus-last-signal',
     status: { pt: 'Em desenvolvimento', es: 'En desarrollo', en: 'In development' },
   },
   {
@@ -85,6 +96,8 @@ export const projects: Project[] = [
     },
     stack: ['Swift', 'SwiftUI', 'SpriteKit'],
     image: '/projects/zero-absoluto-1.webp',
+    gallery: ['/projects/zero-absoluto-1.webp', '/projects/zero-absoluto-2.webp'],
+    policy: 'https://tiagodezan.github.io/games_policy/zero-absoluto/',
     url: 'https://tiagodezan.github.io/games_policy/zero-absoluto/',
     urlLabel: { pt: 'Mais informações', es: 'Más información', en: 'More info' },
   },
@@ -100,6 +113,8 @@ export const projects: Project[] = [
     },
     stack: ['Swift 6', 'SwiftUI', 'SpriteKit'],
     image: '/projects/block-quest-1.webp',
+    gallery: ['/projects/block-quest-1.webp', '/projects/block-quest-2.webp'],
+    policy: 'https://tiagodezan.github.io/games_policy/block-quest/',
     url: 'https://tiagodezan.github.io/games_policy/block-quest/',
     urlLabel: { pt: 'Mais informações', es: 'Más información', en: 'More info' },
   },
@@ -264,6 +279,13 @@ export const t = {
     clientsTitle: { pt: 'Quem já encontrou o caminho com a gente', es: 'Quien ya encontró el camino con nosotros', en: 'Who already found the way with us' },
     ownEyebrow: { pt: 'Criações próprias', es: 'Creaciones propias', en: 'Our own games' },
     ownTitle: { pt: 'Jogos que a gente cria por diversão (e muito teste)', es: 'Juegos que creamos por diversión (y muchas pruebas)', en: 'Games we make for fun (and a lot of testing)' },
+    details: { pt: 'Ver detalhes', es: 'Ver detalles', en: 'View details' },
+    close: { pt: 'Fechar', es: 'Cerrar', en: 'Close' },
+    site: { pt: 'Visitar o site', es: 'Visitar la web', en: 'Visit website' },
+    appStore: { pt: 'Baixar na App Store', es: 'Descargar en el App Store', en: 'Download on the App Store' },
+    googlePlay: { pt: 'Baixar no Google Play', es: 'Descargar en Google Play', en: 'Get it on Google Play' },
+    policy: { pt: 'Política de privacidade', es: 'Política de privacidad', en: 'Privacy policy' },
+    photo: { pt: 'Imagem', es: 'Imagen', en: 'Image' },
   },
   process: {
     eyebrow: { pt: 'Como funciona', es: 'Cómo trabajamos', en: 'How it works' },

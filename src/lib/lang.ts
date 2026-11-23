@@ -37,3 +37,22 @@ export function detectLang(acceptLanguage: string | null, country: string | null
   if (!first && PT.has(c)) return 'pt';
   return 'en';
 }
+
+/**
+ * Language for pages that live at a single URL (e.g. /policies/<app>):
+ * ?lang= wins, then the visitor's saved choice (np_lang cookie), then the browser language.
+ */
+export function pickLang(
+  url: URL,
+  cookies: { get: (k: string) => { value: string } | undefined },
+  headers: Headers,
+  allowed: readonly Lang[] = ['pt', 'es', 'en'],
+): Lang {
+  const ok = (v?: string | null): v is Lang => !!v && (allowed as readonly string[]).includes(v);
+  const q = url.searchParams.get('lang')?.toLowerCase().slice(0, 2);
+  if (ok(q)) return q;
+  const c = cookies.get('np_lang')?.value;
+  if (ok(c)) return c;
+  const d = detectLang(headers.get('accept-language'), headers.get('cf-ipcountry'));
+  return ok(d) ? d : (allowed.includes('en') ? 'en' : allowed[0]);
+}

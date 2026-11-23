@@ -1,0 +1,105 @@
+---
+import Base from '../layouts/Base.astro';
+import Logo from './Logo.astro';
+import { t, langPath, langLabel, htmlLang, LANGS, type Lang } from '../data/content';
+
+interface Props {
+  lang: Lang; title: string; description: string;
+  /** path of this page without the ?lang query, e.g. /policies/nexus-last-signal */
+  path: string; langs?: readonly Lang[];
+}
+const { lang, title, description, path, langs = LANGS } = Astro.props;
+const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
+const href = (l: Lang) => `${path}?lang=${l}`;
+const themeLabels = {
+  pt: { auto: 'Tema: automático', light: 'Tema: claro', dark: 'Tema: escuro' },
+  es: { auto: 'Tema: automático', light: 'Tema: claro', dark: 'Tema: oscuro' },
+  en: { auto: 'Theme: auto', light: 'Theme: light', dark: 'Theme: dark' },
+}[lang];
+const langName = { pt: 'Idioma', es: 'Idioma', en: 'Language' }[lang];
+---
+<Base title={title} description={description} lang={lang} canonical={site + href(lang)}
+  alternates={langs.map((l) => ({ hreflang: htmlLang[l], href: site + href(l) }))} xDefault={site + path}>
+  <header class="top">
+    <div class="wrap top-in">
+      <a href={langPath[lang]} class="brand" aria-label="Noob Perdido Studio">
+        <Logo class="brand-logo" animated={false} follow />
+        <span class="pixel brand-tag">Studio</span>
+      </a>
+      <div class="top-actions">
+        <button class="theme-btn" type="button" id="theme-btn" data-labels={JSON.stringify(themeLabels)} aria-label={themeLabels.auto} title={themeLabels.auto}>
+          <svg class="ti ti-auto" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>
+          <svg class="ti ti-light" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></g></svg>
+          <svg class="ti ti-dark" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" fill="currentColor"/></svg>
+        </button>
+        <div class="langs" role="group" aria-label={langName}>
+          {langs.map((l) => <a href={href(l)} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined}>{langLabel[l]}</a>)}
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <slot />
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot-row">
+      <p class="pixel">© {new Date().getFullYear()} Noob Perdido Studio</p>
+      <p class="muted">{t.footer.rights[lang]}</p>
+      <a class="muted" href="/policies">{{ pt: 'Políticas de privacidade', es: 'Políticas de privacidad', en: 'Privacy policies' }[lang]}</a>
+    </div>
+  </footer>
+
+  <script>
+    const tb = document.getElementById('theme-btn');
+    const setLabel = () => {
+      if (!tb) return;
+      const labels = JSON.parse(tb.dataset.labels || '{}');
+      const cur = document.documentElement.dataset.theme || 'auto';
+      tb.setAttribute('aria-label', labels[cur]); tb.title = labels[cur];
+    };
+    setLabel();
+    tb?.addEventListener('click', () => {
+      const cur = document.documentElement.dataset.theme || 'auto';
+      const next = cur === 'auto' ? 'light' : cur === 'light' ? 'dark' : 'auto';
+      if (next === 'auto') delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme = next;
+      try { next === 'auto' ? localStorage.removeItem('np_theme') : localStorage.setItem('np_theme', next); } catch {}
+      setLabel();
+    });
+    // remember a manual language choice (same cookie the home page uses)
+    document.querySelectorAll<HTMLAnchorElement>('.langs a[hreflang]').forEach((a) => a.addEventListener('click', () => {
+      document.cookie = `np_lang=${a.hreflang}; path=/; max-age=31536000; samesite=lax${location.protocol === 'https:' ? '; secure' : ''}`;
+    }));
+  </script>
+</Base>
+
+<style>
+  .top { position: sticky; top: 0; z-index: 50; background: var(--header-bg); backdrop-filter: blur(14px) saturate(140%); -webkit-backdrop-filter: blur(14px) saturate(140%); border-bottom: 1px solid var(--line); }
+  .top-in { display: flex; align-items: center; gap: 24px; height: 72px; }
+  .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; margin-right: auto; }
+  .brand :global(.brand-logo) { width: 132px; }
+  .brand-tag { font-size: 8px; color: var(--accent); border: 1px solid var(--line-2); padding: 5px 7px 4px; border-radius: 6px; }
+  .top-actions { display: flex; align-items: center; gap: 16px; }
+  .langs { display: flex; gap: 2px; padding: 3px; border: 1px solid var(--line); border-radius: 10px; }
+  .langs a { font: 600 12px/1 var(--font-display); letter-spacing: .06em; color: var(--faint); text-decoration: none; padding: 7px 8px; border-radius: 7px; }
+  .langs a:hover { color: var(--text); }
+  .langs a[aria-current] { background: var(--bg-2); color: var(--blue); }
+  .theme-btn { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 10px; border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; transition: color .2s, border-color .2s; }
+  .theme-btn:hover { color: var(--text); border-color: var(--line-2); }
+  .theme-btn .ti { display: none; grid-area: 1 / 1; }
+  :global(html:not([data-theme])) .theme-btn .ti-auto,
+  :global(html[data-theme='light']) .theme-btn .ti-light,
+  :global(html[data-theme='dark']) .theme-btn .ti-dark { display: block; }
+  @media (max-width: 560px) {
+    .top-actions { gap: 8px; }
+    .top-in { gap: 12px; height: 64px; }
+    .brand :global(.brand-logo) { width: 108px; }
+    .brand-tag { display: none; }
+  }
+  .foot { border-top: 1px solid var(--line); padding: 32px 0; }
+  .foot-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 32px; }
+  .foot .pixel { font-size: 9px; color: var(--faint); }
+  .muted { color: var(--muted); font-size: 15px; }
+  a.muted:hover { color: var(--accent); }
+</style>

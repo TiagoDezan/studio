@@ -3,6 +3,8 @@ import Base from '../../layouts/Base.astro';
 import Logo from '../../components/Logo.astro';
 import { isAdmin, adminEnabled } from '../../lib/auth';
 import { getSettings, getLeads, getStats, getProjects } from '../../lib/store';
+import { listPolicies } from '../../lib/policies';
+const policySlugs = listPolicies().map((x) => x.slug);
 
 const admin = isAdmin(Astro.cookies);
 const err = Astro.url.searchParams.get('e');
@@ -215,7 +217,7 @@ const errKeys = ['missing', 'badimg'];
                     <option value="own" selected={!ep || ep.kind === 'own'}>Criação própria</option>
                   </select>
                 </label>
-                <label><span>Link (opcional)</span><input type="url" name="url" placeholder="https://…" value={ep?.url ?? ''} /></label>
+                <label><span>Site (opcional)</span><input type="url" name="url" placeholder="https://…" value={ep?.url ?? ''} /></label>
                 <label><span>Tecnologias (separadas por vírgula)</span><input name="stack" placeholder="Swift, SwiftUI, Supabase" value={ep?.stack.join(', ') ?? ''} /></label>
               </div>
               <div class="switches">
@@ -241,6 +243,24 @@ const errKeys = ['missing', 'badimg'];
                 </div>
               </div>
 
+              <h2>Janela de detalhes</h2>
+              <p class="muted small">Aparece quando a pessoa clica no projeto no site.</p>
+              <div class="grid2">
+                <label><span>Link da App Store (opcional)</span><input type="url" name="appStore" placeholder="https://apps.apple.com/…" value={ep?.appStore ?? ''} /></label>
+                <label><span>Link do Google Play (opcional)</span><input type="url" name="googlePlay" placeholder="https://play.google.com/…" value={ep?.googlePlay ?? ''} /></label>
+                <label><span>Política de privacidade</span>
+                  <input name="policy" list="policy-slugs" placeholder="Automática (pelo nome)" value={ep?.policy ?? ''} />
+                  <datalist id="policy-slugs">{policySlugs.map((x) => <option value={x} />)}</datalist>
+                  <em class="muted small">Nome de uma política em /policies ({policySlugs.join(', ')}) ou um link https://. Vazio usa /policies/&lt;nome-do-projeto&gt; se existir.</em>
+                </label>
+              </div>
+              <div class="gallery-edit">
+                {(ep?.gallery ?? []).map((g) => (
+                  <label class="g-item"><img src={g} alt="" /><span class="switch"><input type="checkbox" name="removeGallery" value={g} /><span>Remover</span></span></label>
+                ))}
+              </div>
+              <label><span>Adicionar fotos à galeria (várias de uma vez, até 8 MB cada)</span><input type="file" name="galleryFiles" multiple accept="image/png,image/jpeg,image/webp,image/avif,image/gif" /></label>
+
               <h2>Textos</h2>
               <p class="muted small">Só o português é obrigatório na prática: se espanhol ou inglês ficarem vazios, o site mostra o texto em português.</p>
               <div class="langtabs" role="tablist">
@@ -250,6 +270,7 @@ const errKeys = ['missing', 'badimg'];
                 <div class="lpane" data-l={k} hidden={i !== 0}>
                   <label><span>Etiqueta curta</span><input name={`tag_${k}`} maxlength="80" placeholder={k === 'pt' ? 'Ex.: App + web' : ''} value={ep?.tag?.[k] ?? ''} /></label>
                   <label><span>Descrição</span><textarea name={`summary_${k}`} rows="4" maxlength="700">{ep?.summary?.[k] ?? ''}</textarea></label>
+                  <label><span>Mais detalhes (só na janela; opcional, linha em branco separa parágrafos)</span><textarea name={`details_${k}`} rows="5" maxlength="3000">{ep?.details?.[k] ?? ''}</textarea></label>
                   <div class="grid2">
                     <label><span>Texto do botão (opcional)</span><input name={`urlLabel_${k}`} maxlength="60" placeholder={k === 'pt' ? 'Ver projeto' : k === 'es' ? 'Ver proyecto' : 'View project'} value={ep?.urlLabel?.[k] ?? ''} /></label>
                     <label><span>Selo na imagem (opcional)</span><input name={`status_${k}`} maxlength="40" placeholder={k === 'pt' ? 'Ex.: Em desenvolvimento' : ''} value={ep?.status?.[k] ?? ''} /></label>
@@ -442,4 +463,7 @@ const errKeys = ['missing', 'badimg'];
     .cards { grid-template-columns: 1fr 1fr; }
     .two, .grid2 { grid-template-columns: 1fr; }
   }
+  .gallery-edit { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
+  .g-item { display: grid; gap: 6px; width: 140px; }
+  .g-item img { width: 140px; height: 96px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); }
 </style>

@@ -37,6 +37,8 @@ interface Db {
   /** visits[day][path] = count */
   visits: Record<string, Record<string, number>>;
   referrers: Record<string, number>;
+  /** one-time data migrations already applied */
+  migrations?: string[];
 }
 
 const DATA_DIR = process.env.DATA_DIR || path.join(process.cwd(), 'data');
@@ -76,6 +78,20 @@ if (!db.projects) {
     visible: !db.settings.hiddenProjects?.includes(p.id),
     order: (order.indexOf(p.id) + 1) || 99,
   }));
+}
+
+// one-time: copy the project-window fields (gallery, links, policy) from the code defaults into
+// projects that were seeded before those fields existed. Runs once, so later edits in /painel stick.
+db.migrations ??= [];
+if (!db.migrations.includes('project-window-v1')) {
+  const keys = ['details', 'gallery', 'appStore', 'googlePlay', 'policy'] as const;
+  for (const p of db.projects ?? []) {
+    const d = defaultProjects.find((x) => x.id === p.id);
+    if (!d) continue;
+    for (const k of keys) if (p[k] === undefined && d[k] !== undefined) (p as any)[k] = structuredClone(d[k]);
+  }
+  db.migrations.push('project-window-v1');
+  queueMicrotask(() => save());
 }
 
 export const UPLOAD_DIR = path.join(DATA_DIR, 'uploads');

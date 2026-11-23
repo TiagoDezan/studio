@@ -64,6 +64,21 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
         await removeUpload(existing?.image);
         image = '';
       }
+      // gallery: keep the current photos minus the ones marked for removal, then add new uploads
+      const removeG = new Set(fd.getAll('removeGallery').map(String));
+      const gallery = (existing?.gallery ?? []).filter((g) => !removeG.has(g));
+      for (const g of removeG) await removeUpload(g);
+      for (const gf of fd.getAll('galleryFiles')) {
+        if (!(gf instanceof File) || gf.size === 0) continue;
+        const ext = IMG_TYPES[gf.type];
+        if (!ext || ext === 'svg' || gf.size > 8 * 1024 * 1024) return redirect(`/painel?tab=projetos&edit=${existing?.id ?? 'new'}&ok=badimg`, 303);
+        await fs.mkdir(UPLOAD_DIR, { recursive: true });
+        const fname = `${id}-g-${Date.now().toString(36)}${randomUUID().slice(0, 4)}.${ext}`;
+        await fs.writeFile(path.join(UPLOAD_DIR, fname), Buffer.from(await gf.arrayBuffer()));
+        gallery.push('/media/' + fname);
+      }
+      const link = (k: string) => { const v = str(fd, k, 400); return /^https:\/\//.test(v) ? v : undefined; };
+      const policy = str(fd, 'policy', 300);
       const url = str(fd, 'url', 300);
       const bg = str(fd, 'imageBg', 20);
       const p: StoredProject = {
@@ -79,6 +94,11 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
         url: /^https?:\/\//.test(url) ? url : undefined,
         urlLabel: tri(fd, 'urlLabel', 60),
         status: tri(fd, 'status', 40),
+        details: tri(fd, 'details', 3000),
+        gallery: gallery.slice(0, 20),
+        appStore: link('appStore'),
+        googlePlay: link('googlePlay'),
+        policy: /^https:\/\//.test(policy) || /^[a-z0-9-]+$/.test(policy) ? policy : undefined,
         visible: fd.get('visible') === 'on',
         order: Number(fd.get('order') || existing?.order || getProjects().length + 1),
       };
@@ -88,6 +108,7 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
     case 'projectDelete': {
       const p = deleteProject(str(fd, 'id', 60));
       await removeUpload(p?.image);
+      for (const g of p?.gallery ?? []) await removeUpload(g);
       return back('projetos', 'pdeleted');
     }
     case 'toggleMaintenance':
