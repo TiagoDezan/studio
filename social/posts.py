@@ -4,7 +4,7 @@ import json
 HT_DEV = '#gamedev #indiedev #indiegame #pixelart #devlog #iosgames #madewithswift #noobperdido'
 HT_GAMES = '#indiegame #iosgames #mobilegames #puzzlegame #gamedev #indiedev #noobperdido'
 HT_KIDS = '#educationalgames #mathgames #kidsapps #homeschool #parenting #iosgames #noobperdido'
-HT_STUDIO = '#appdevelopment #webdevelopment #startup #saas #iosdev #ai #noobperdido'
+HT_STUDIO = '#appdevelopment #webdevelopment #startup #saas #iosdev #noobperdido'
 
 P = []
 
@@ -30,7 +30,7 @@ Swipe to see:
 • how we work, in four levels
 • what you'll find here every week
 
-We work in English, Spanish and Portuguese, with clients in Europe and the Americas. 🇬🇧 🇪🇸 🇧🇷
+We work in English, Spanish and Portuguese. 🇬🇧 🇪🇸 🇧🇷
 
 Lost with your idea? We'll find the way. Tell us about it at studio.noobperdido.com (link in bio).
 
