@@ -58,7 +58,7 @@ Lost with your idea? We'll find the way. Tell us about it at studio.noobperdido.
 <li><div>Monday: Nexus devlog<small>Our action RPG in development</small></div></li>
 <li><div>Wednesday: Our games<small>Block Quest and Operation Absolute Zero</small></div></li>
 <li><div>Friday: Studio<small>Case studies, behind the scenes and AI</small></div></li></ul>
-<div class="chips"><span class="chip o">WE SPEAK</span><span class="chip">ENGLISH</span><span class="chip">ESPAÑOL</span><span class="chip">PORTUGUÊS</span></div>
+<div class="chips"><span class="chip o">WE SPEAK</span><span class="chip">ENGLISH</span><span class="chip">ESPAÑOL</span><span class="chip">PORTUGUES</span></div>
 <div class="cta">TELL US YOUR IDEA ▶<br>STUDIO.NOOBPERDIDO.COM</div>"""),
 ])
 

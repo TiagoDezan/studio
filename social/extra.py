@@ -20,7 +20,7 @@ LACESTA = {
 <h1>NAVIDAD<br><span class="g">SIN PASARTE</span><br>DEL PRESUPUESTO</h1>
 <p class="lead">La compra de las fiestas, bajo control.</p>
 <p class="small">LaCesta · Tu asistente de compras</p>"""},
-        {'html': f"""<h2 style="color:#34d399">EN EL SÚPER</h2>
+        {'html': f"""<h2 style="color:#34d399">EN EL SUPER</h2>
 <p class="lead">Marca lo que metes en el carrito y mira cuánto te queda, al momento.</p>
 <div class="phones"><img src="{A}cesta/01-compra.png"><img src="{A}cesta/03-al-carrito.png"></div>"""},
         {'html': f"""<h2 style="color:#34d399">SIN SUSTOS</h2>
@@ -88,7 +88,7 @@ STORIES = [
     ('s12', '2026-12-08', ENG, spage('YOUR IDEA', f"""<h1 class="st">GOT AN<br><span class="b">APP IDEA?</span></h1>
 <p class="big">Tell us in one line. We'll tell you how we'd build it.</p>
 <p class="lead">We work in</p>
-<div class="lang"><span>ENGLISH</span></div><div class="lang"><span>ESPAÑOL</span><span>PORTUGUÊS</span></div>
+<div class="lang"><span>ENGLISH</span></div><div class="lang"><span>ESPAÑOL</span><span>PORTUGUES</span></div>
 <div class="reply">REPLY TO THIS STORY 💬</div>""")),
     ('s13', '2026-12-09', NP, newpost(OUT + '08-bq-worlds-1.jpg', 'FIVE WORLDS.<br><span class="b">ONE LOST JEWEL.</span>')),
     ('s14', '2026-12-10', ENG, spage('BEHIND THE SCENES', f"""<p class="big">Two enemies waiting for you in Nexus 👾</p>
@@ -106,12 +106,12 @@ STORIES = [
 <div class="cell"><img src="{A}skill_nexus_surge.png" style="width:240px;height:240px"><span>3 · NEXUS SURGE</span></div>
 <div class="cell"><img src="{A}skill_precision_shot.png" style="width:240px;height:240px"><span>4 · PRECISION</span></div></div>
 <div class="reply">REPLY WITH 1, 2, 3 OR 4</div>""")),
-    ('s18', '2026-12-16', NP, newpost(OUT + '15-lacesta-navidad-1.jpg', 'NAVIDAD<br><span class="g">SIN PASARTE</span>', 'MÍRALO EN NUESTRO PERFIL', 'NUEVO POST')),
+    ('s18', '2026-12-16', NP, newpost(OUT + '15-lacesta-navidad-1.jpg', 'NAVIDAD<br><span class="g">SIN PASARTE</span>', 'MIRALO EN NUESTRO PERFIL', 'NUEVO POST')),
     ('s19', '2026-12-17', ENG, spage('BLOCK QUEST', f"""<div class="phones" style="flex:0 0 1000px"><img src="{A}en-bq-3.jpg" style="max-height:1000px"></div>
 <p class="big" style="text-align:center">Which Block Quest world is your favorite?</p>
 <div class="reply">REPLY WITH ITS NAME 💎</div>""")),
     ('s20', '2026-12-18', ENG, spage('LACESTA', f"""<img src="{A}cesta/icon.png" style="width:300px;border-radius:68px;align-self:center">
-<h1 class="st" style="text-align:center">¿CUÁNTO VAS A<br><span class="g">GASTAR EN LA COMPRA</span><br>DE NAVIDAD?</h1>
+<h1 class="st" style="text-align:center">¿CUANTO VAS A<br><span class="g">GASTAR EN LA COMPRA</span><br>DE NAVIDAD?</h1>
 <p class="big" style="text-align:center">Pon un presupuesto y LaCesta te dice cuánto te queda en cada pasillo.</p>
 <div class="reply">RESPONDE CON TU CIFRA 🛒</div>""")),
     ('s21', '2026-12-22', ENG, spage('YOUR TURN', f"""<h1 class="st" style="text-align:center">YOUR<br><span class="b">GAME OF</span><br>THE YEAR?</h1>
