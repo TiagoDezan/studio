@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>LaCesta · Nueva contraseña</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <header><img src="icon.png" alt=""><a href="./">LaCesta</a></header>
+  <form class="card" id="form" hidden>
+    <h1>Nueva contraseña</h1>
+    <p>Elige una contraseña nueva para tu cuenta de LaCesta.</p>
+    <label for="password">Contraseña nueva</label>
+    <input id="password" type="password" autocomplete="new-password" minlength="8" required>
+    <label for="repeat">Repite la contraseña</label>
+    <input id="repeat" type="password" autocomplete="new-password" minlength="8" required>
+    <p class="error" id="error" role="alert"></p>
+    <button id="save" type="submit">Guardar contraseña</button>
+  </form>
+  <div class="card" id="done" hidden>
+    <div class="badge">✓</div>
+    <h1>Contraseña cambiada</h1>
+    <p>Vuelve a LaCesta y entra con tu nueva contraseña en Ajustes &gt; Cuenta.</p>
+  </div>
+  <div class="card" id="fail" hidden>
+    <h1>Enlace no válido</h1>
+    <p class="error" id="reason"></p>
+  </div>
+  <footer><a href="./">Soporte</a><a href="privacidad.html">Privacidad</a></footer>
+</main>
+<script type="module">
+  import { SUPABASE_URL, PUBLISHABLE_KEY, authFragment, errorText } from "./auth.js";
+  const f = authFragment();
+  history.replaceState(null, "", location.pathname); // tira o token da barra de endereço
+  const show = (id) => ["form", "done", "fail"].forEach((x) => (document.getElementById(x).hidden = x !== id));
+
+  if (f.error || f.type !== "recovery" || !f.access_token) {
+    document.getElementById("reason").textContent = f.error ? errorText(f) : "Abre esta página desde el enlace del correo que te hemos enviado.";
+    show("fail");
+  } else {
+    show("form");
+    const form = document.getElementById("form");
+    const error = document.getElementById("error");
+    const save = document.getElementById("save");
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const password = document.getElementById("password").value;
+      if (password.length < 8) { error.textContent = "La contraseña debe tener al menos 8 caracteres."; return; }
+      if (password !== document.getElementById("repeat").value) { error.textContent = "Las contraseñas no coinciden."; return; }
+      error.textContent = "";
+      save.disabled = true;
+      try {
+        const response = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json", apikey: PUBLISHABLE_KEY, Authorization: `Bearer ${f.access_token}` },
+          body: JSON.stringify({ password }),
+        });
+        if (response.ok) { show("done"); return; }
+        const body = await response.json().catch(() => ({}));
+        error.textContent = body.error_code === "weak_password" ? "Elige una contraseña más segura."
+          : body.error_code === "same_password" ? "La contraseña nueva debe ser distinta de la anterior."
+          : response.status === 401 || response.status === 403 ? "El enlace ha caducado. Pide uno nuevo desde la app."
+          : "No se ha podido guardar. Inténtalo de nuevo.";
+      } catch {
+        error.textContent = "Sin conexión. Inténtalo de nuevo.";
+      }
+      save.disabled = false;
+    });
+  }
+</script>
+</body>
+</html>

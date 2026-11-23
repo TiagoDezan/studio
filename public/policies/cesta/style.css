@@ -1,0 +1,26 @@
+:root { --green:#047857; --soft:#e7f5ef; --text:#1c1c1e; --muted:#636366; --bg:#f7f7f5; --card:#fff; --border:#e5e5ea; --danger:#c62828; }
+@media (prefers-color-scheme: dark) {
+  :root { --green:#34d399; --soft:#12352a; --text:#f2f2f7; --muted:#aeaeb2; --bg:#111; --card:#1c1c1e; --border:#2c2c2e; --danger:#ff6b6b; }
+}
+* { box-sizing: border-box; }
+body { margin:0; font:17px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background:var(--bg); color:var(--text); }
+main { max-width:680px; margin:0 auto; padding:40px 16px 64px; }
+header { display:flex; align-items:center; gap:12px; margin-bottom:24px; }
+header img { width:48px; height:48px; border-radius:11px; }
+header a { color:inherit; text-decoration:none; font-weight:700; font-size:22px; }
+h1 { font-size:28px; line-height:1.2; margin:0 0 12px; }
+h2 { font-size:19px; margin:28px 0 6px; }
+p, li { color:var(--muted); }
+a { color:var(--green); }
+footer { margin-top:40px; font-size:14px; color:var(--muted); }
+footer a { margin-right:16px; }
+.faq p { margin:6px 0 14px; }
+.card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:24px; }
+.badge { display:inline-flex; width:56px; height:56px; border-radius:50%; background:var(--soft); color:var(--green); align-items:center; justify-content:center; font-size:28px; margin-bottom:12px; }
+label { display:block; font-weight:600; margin:16px 0 6px; color:var(--text); }
+input { width:100%; font:inherit; padding:12px 14px; border-radius:12px; border:1px solid var(--border); background:var(--bg); color:var(--text); }
+button { margin-top:20px; width:100%; min-height:48px; font:inherit; font-weight:600; border:0; border-radius:12px; background:var(--green); color:#fff; cursor:pointer; }
+@media (prefers-color-scheme: dark) { button { color:#06281d; } }
+button:disabled { opacity:.5; cursor:default; }
+.error { color:var(--danger); }
+.ok { color:var(--green); }

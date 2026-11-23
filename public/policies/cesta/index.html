@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LaCesta · Soporte</title>
+<meta name="description" content="LaCesta, tu asistente de compras: lista de la compra con presupuesto para supermercados de España.">
+<link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+<script type="module">
+  // Os links dos e-mails da conta (Supabase) chegam aqui: encaminha para a página certa.
+  import { authFragment } from "./auth.js";
+  const f = authFragment();
+  if (f.type === "recovery") location.replace("nueva-contrasena.html" + location.hash);
+  else if (f.type === "signup" || f.type === "email_change" || f.error) location.replace("confirmado.html" + location.hash);
+</script>
+</head>
+<body>
+<main>
+  <header><img src="icon.png" alt=""><a href="./">LaCesta</a></header>
+  <h1>Soporte</h1>
+  <p>LaCesta, tu asistente de compras, es una app para organizar la compra del supermercado en España: listas, presupuesto por compra y mensual, precios y comparación entre supermercados. Disponible para iPhone, iPad y Mac.</p>
+
+  <h2>Preguntas frecuentes</h2>
+  <div class="faq">
+    <p><strong>¿Necesito una cuenta?</strong><br>No. La cuenta es opcional. Tus listas se guardan en tu dispositivo y, si lo activas, en tu iCloud.</p>
+    <p><strong>¿Cómo elimino mi cuenta?</strong><br>En la app, Ajustes &gt; Cuenta &gt; Eliminar cuenta. Se borran tu correo y el acceso con Apple.</p>
+    <p><strong>He olvidado la contraseña.</strong><br>En la app, Ajustes &gt; Cuenta &gt; «¿Has olvidado la contraseña?». Te enviaremos un enlace para elegir una nueva.</p>
+    <p><strong>¿Cómo sincronizo entre iPhone, iPad y Mac?</strong><br>Inicia sesión con el mismo Apple ID en todos tus dispositivos y activa iCloud para LaCesta en Ajustes &gt; [tu nombre] &gt; iCloud.</p>
+    <p><strong>¿Cómo comparto una lista con mi familia?</strong><br>Abre la lista y toca Compartir. Las personas que invites pueden verla y editarla. Compartir listas requiere LaCesta Pro solo para quien comparte.</p>
+    <p><strong>¿Cómo cancelo LaCesta Pro?</strong><br>En Ajustes del iPhone &gt; [tu nombre] &gt; Suscripciones, o en la app: Ajustes &gt; Gestionar suscripción. La suscripción se renueva automáticamente salvo que la canceles al menos 24 horas antes del final del periodo.</p>
+    <p><strong>He cambiado de iPhone y no veo LaCesta Pro.</strong><br>Abre Ajustes &gt; Probar LaCesta Pro y toca «Restaurar compras» con el mismo Apple ID con el que te suscribiste.</p>
+    <p><strong>El aviso al llegar al súper no funciona.</strong><br>Permite las notificaciones y la ubicación «Siempre» para LaCesta en Ajustes del iPhone, y comprueba que la lista tenga un supermercado asignado.</p>
+  </div>
+
+  <h2>Contacto</h2>
+  <p>Escríbenos a <a href="mailto:tiago@dezan.me?subject=LaCesta">tiago@dezan.me</a>. Respondemos en español, portugués o inglés.</p>
+
+  <footer><a href="privacidad.html">Privacidad</a><a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">Términos de uso</a></footer>
+</main>
+</body>
+</html>

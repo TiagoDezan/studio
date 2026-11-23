@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LaCesta · Cuenta confirmada</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <header><img src="icon.png" alt=""><a href="./">LaCesta</a></header>
+  <div class="card" id="ok">
+    <div class="badge">✓</div>
+    <h1>Cuenta confirmada</h1>
+    <p>Ya puedes volver a LaCesta y entrar con tu correo y contraseña en Ajustes &gt; Cuenta.</p>
+  </div>
+  <div class="card" id="fail" hidden>
+    <h1>No se ha podido confirmar</h1>
+    <p class="error" id="reason"></p>
+  </div>
+  <footer><a href="./">Soporte</a><a href="privacidad.html">Privacidad</a></footer>
+</main>
+<script type="module">
+  import { authFragment, errorText } from "./auth.js";
+  const f = authFragment();
+  if (f.error) {
+    document.getElementById("ok").hidden = true;
+    document.getElementById("fail").hidden = false;
+    document.getElementById("reason").textContent = errorText(f);
+  }
+  // Não deixa os tokens na barra de endereço nem no histórico.
+  history.replaceState(null, "", location.pathname);
+</script>
+</body>
+</html>
