@@ -729,10 +729,11 @@ const themeLabels = {
   .pd-arrow:hover { color: var(--accent); border-color: var(--accent); }
   @media (hover: none) { .pd-nav { display: none; } }
   .pd-gallery { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 12px; background: var(--bg-2); scrollbar-width: thin; }
-  .pd-gallery figure { margin: 0; flex: 0 0 auto; height: clamp(200px, 42vh, 380px); aspect-ratio: 4 / 3; scroll-snap-align: start; border-radius: 10px; overflow: hidden; background: var(--bg); }
+  .pd-gallery figure { margin: 0; flex: 0 0 auto; height: clamp(200px, 42vh, 380px); min-width: 120px; scroll-snap-align: start; border-radius: 10px; overflow: hidden; background: var(--bg); }
   .pd-gallery.single figure { width: 100%; aspect-ratio: auto; }
   .pd-gallery figure.is-logo { display: grid; place-items: center; aspect-ratio: 16 / 9; }
-  .pd-gallery img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pd-gallery img { width: auto; height: 100%; max-width: min(820px, 80vw); object-fit: cover; display: block; }
+  .pd-gallery.single img { width: 100%; max-width: none; }
   .pd-gallery figure.is-logo img { width: 60%; height: 60%; object-fit: contain; }
   .pd-body { padding: clamp(20px, 4vw, 36px); display: grid; gap: 14px; color: var(--muted); }
   .pd-body h3 { color: var(--text); font-size: clamp(26px, 3.4vw, 36px); }
