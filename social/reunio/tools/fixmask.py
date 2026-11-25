@@ -4,7 +4,7 @@ SRC,DST=sys.argv[1],sys.argv[2]
 FONT='/usr/share/fonts/opentype/inter/Inter-SemiBold.otf'
 FAKE='VN-26-014-C'
 def qrimg(n):
-    q=qrcode.QRCode(border=0,error_correction=qrcode.constants.ERROR_CORRECT_M);q.add_data('https://my.reunio.app');q.make()
+    q=qrcode.QRCode(border=0,error_correction=qrcode.constants.ERROR_CORRECT_M);q.add_data('https://reunio.app');q.make()
     return q.make_image(fill_color='#0b1a1d',back_color='white').convert('RGB').resize((n,n),Image.NEAREST)
 for f in sorted(glob.glob(SRC+'/**/*.png',recursive=True)):
     im=Image.open(f).convert('RGB');a=np.array(im).astype(int)
