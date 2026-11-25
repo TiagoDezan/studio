@@ -68,3 +68,11 @@ CTA={'es':('Crea la cuenta de<br>tu iglesia <span class="o">gratis</span>.','En 
      'pt':('Cria a conta da<br>tua igreja <span class="o">grátis</span>.','Na web e no iPhone. Link na bio.','Grátis'),
      'en':('Create your church\'s<br>account <span class="o">for free</span>.','On the web and iPhone. Link in bio.','Free')}
 SWIPE={'es':'Desliza →','pt':'Desliza →','en':'Swipe →'}
+T['widgets']=dict(tag={'es':'Widgets','pt':'Widgets','en':'Widgets'}, slides=[
+   ('widgets/01-widgets.png',{'es':('Tu iglesia en la<br><span class="o">pantalla de inicio</span>.','Próximos eventos y tu escala del domingo, sin abrir la app.'),
+                            'pt':('A tua igreja no<br><span class="o">ecrã principal</span>.','Próximos eventos e a tua escala de domingo, sem abrir a app.'),
+                            'en':('Your church on your<br><span class="o">home screen</span>.','Upcoming events and your Sunday rota, without opening the app.')}),
+   ('portal-miembro/01-identidad.png',{'es':('El carné con QR,<br><span class="o">a un vistazo</span>.','El widget del carné está siempre listo para el check-in.'),
+                            'pt':('O cartão com QR,<br><span class="o">num relance</span>.','O widget do cartão fica sempre pronto para o check-in.'),
+                            'en':('Your QR card,<br><span class="o">at a glance</span>.','The card widget is always ready for check-in.')}),
+])
